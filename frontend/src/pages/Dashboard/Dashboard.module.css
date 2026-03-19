@@ -1,0 +1,26 @@
+.dashboard {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 24px;
+  padding: 24px;
+  height: 100%;
+}
+
+.leftCol, .rightCol {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 24px;
+}
+
+.cardTitle {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 20px;
+}

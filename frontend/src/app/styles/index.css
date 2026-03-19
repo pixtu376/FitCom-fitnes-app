@@ -1,0 +1,33 @@
+:root {
+  --bg-dark: #121417;
+  --sidebar-bg: #1c1f24;
+  --card-bg: #22252a;
+  --accent-green: #4ade80;
+  --border-color: #2d3139;
+  --text-main: #ffffff;
+  --text-gray: #9ca3af;
+  
+  --color-protein: #5383b1;
+  --color-fat: #e5a55d;
+  --color-carb: #71c391;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+#root {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}

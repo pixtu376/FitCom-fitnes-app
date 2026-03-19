@@ -1,0 +1,39 @@
+.container {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+}
+
+.stats { flex: 1; display: flex; flex-direction: column; gap: 16px; }
+
+.row { display: flex; flex-direction: column; gap: 6px; }
+
+.labelRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+}
+
+.val { color: var(--text-gray); }
+
+.barBg { height: 4px; background: #333; border-radius: 2px; }
+
+.barFill { height: 100%; border-radius: 2px; }
+
+.chartSide { display: flex; align-items: center; gap: 16px; }
+
+.pieWrapper { width: 100px; height: 100px; position: relative; }
+
+.pieLabel {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.legend { display: flex; flex-direction: column; gap: 4px; font-size: 12px; }
+
+.legendItem { display: flex; align-items: center; gap: 6px; }
+
+.dot { width: 8px; height: 8px; border-radius: 50%; }

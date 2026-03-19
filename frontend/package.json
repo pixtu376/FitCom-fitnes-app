@@ -4,6 +4,7 @@
   "description": "",
   "main": "eslint.config.js",
   "scripts": {
+    "dev": "vite",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -15,6 +16,7 @@
     "axios": "^1.13.6",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
+    "react-router-dom": "^7.13.1",
     "recharts": "^3.8.0",
     "tesseract.js": "^7.0.0"
   },

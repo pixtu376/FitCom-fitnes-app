@@ -1,0 +1,19 @@
+.wrapper {
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+  color: var(--text-gray);
+}
+
+.arrow { cursor: pointer; }
+
+.chartContainer {
+  height: 200px;
+  width: 100%;
+}
