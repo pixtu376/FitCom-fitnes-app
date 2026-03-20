@@ -1,22 +1,24 @@
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import styles from "./NutritionMemo.module.css";
 
-const pieData = [
-  { name: "Протеин", value: 15, color: "#5383b1" },
-  { name: "Жиры", value: 40, color: "#e5a55d" },
-  { name: "Углеводы", value: 45, color: "#71c391" }
-];
+export default function NutritionMemo({ data }) {
+  const pieData = [
+    { name: "Белки", value: data?.protein || 0, color: "#5383b1" },
+    { name: "Жиры", value: data?.fats || 0, color: "#e5a55d" },
+    { name: "Углеводы", value: data?.carbohydrates || 0, color: "#71c391" }
+  ];
 
-export default function NutritionMemo() {
+  const stats = [
+    { label: "Калории", val: `${data?.calories || 0} Ккал`, c: "#4ade80" },
+    { label: "Белки", val: `${data?.protein || 0} Г`, c: "#5383b1" },
+    { label: "Жиры", val: `${data?.fats || 0} Г`, c: "#e5a55d" },
+    { label: "Углеводы", val: `${data?.carbohydrates || 0} Г`, c: "#71c391" },
+  ];
+
   return (
     <div className={styles.container}>
       <div className={styles.stats}>
-        {[
-          { label: "Калории", val: "1850 / 2500 Ккал", p: 74, c: "#4ade80" },
-          { label: "Протеин", val: "130 / 180 Г", p: 72, c: "#5383b1" },
-          { label: "Жиры", val: "100 / 120 Г", p: 83, c: "#e5a55d" },
-          { label: "Углеводы", val: "260 / 280 Г", p: 92, c: "#71c391" },
-        ].map(s => (
+        {stats.map(s => (
           <div key={s.label} className={styles.row}>
             <div className={styles.labelRow}>
               <span>{s.label}</span>

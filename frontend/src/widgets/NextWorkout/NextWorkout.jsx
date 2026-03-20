@@ -1,29 +1,69 @@
 import styles from "./NextWorkout.module.css";
+import api from "../../app/api";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export default function NextWorkout() {
-  const exercises = [
-    { id: 1, name: "Приседания со штангой", sets: "4×8", weight: "80кг" },
-    { id: 2, name: "Жим ногами в тренажере", sets: "4×8", weight: "80кг" },
-    { id: 3, name: "Выпады", sets: "4×8", weight: "" },
-    { id: 4, name: "Румынская тяга", sets: "4×8", weight: "" },
-    { id: 5, name: "Разгибания ног в тренажере сидя", sets: "4×8", weight: "" },
-    { id: 6, name: "Сгибания ног в тренажере", sets: "4×8", weight: "" },
-    { id: 7, name: "Подъемы на носки стоя", sets: "4×8", weight: "" },
-  ];
+export default function NextWorkout({ plan }) {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: ({ id, weight }) => {
+      return api.post(`/exercises/${id}/weight`, { weight });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["userData"] });
+    },
+    onError: (error) => {
+      console.error("Ошибка при сохранении веса:", error);
+      alert("Не удалось сохранить вес");
+    }
+  });
+
+  const handleBlur = (e, exerciseId) => {
+    const value = e.target.value.replace("кг", "").trim();
+    if (!value) return;
+
+    const weight = parseFloat(value);
+    if (!isNaN(weight)) {
+      mutation.mutate({ id: exerciseId, weight });
+    }
+  };
+
+  if (!plan) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.info}>Планов на сегодня нет</div>
+      </div>
+    );
+  }
+
+  const exercises = plan.exercises || [];
 
   return (
     <div className={styles.container}>
       <div className={styles.info}>
-        Через 2 дня <span className={styles.accent}>День ног</span>
+        Ближайшая: <span className={styles.accent}>{plan.name || "Тренировка"}</span>
       </div>
+      
       <div className={styles.list}>
-        {exercises.map(ex => (
-          <div key={ex.id} className={styles.item}>
-            <span className={styles.name}>{ex.id}. {ex.name}</span>
+        {exercises.map((ex, index) => (
+          <div key={ex.id || index} className={styles.item}>
+            <span className={styles.name}>
+              {index + 1}. {ex.name} 
+            </span>
+            
             <div className={styles.controls}>
               <button className={styles.addBtn}>+</button>
-              <span className={styles.sets}>{ex.sets}</span>
-              <input type="text" className={styles.input} defaultValue={ex.weight} />
+              <span className={styles.sets}>
+                {ex.sets ? `${ex.sets}×` : ""}{ex.reps}
+              </span>
+              <input 
+                type="text" 
+                className={styles.input} 
+                defaultValue={ex.weight ? `${ex.weight}кг` : ""} 
+                placeholder="--"
+                onBlur={(e) => handleBlur(e, ex.id)} 
+                onKeyDown={(e) => e.key === 'Enter' && e.target.blur()}
+              />
             </div>
           </div>
         ))}
