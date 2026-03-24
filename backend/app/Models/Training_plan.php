@@ -7,27 +7,29 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Stat extends Model
+class Training_plan extends Model
 {
     use HasUuids;
-
-    protected $table = 'stat';
-
-    protected $fillable = ['stat_id','user_id', 'name_stat', 'value', 'unit'];
     
-    protected $primaryKey = 'stat_id';
+    protected $table = 'training_plan';
+
+    protected $fillable = ['plan_id', 'user_id', 'name', 'start_date', 'end_date'];
+    
+    protected $primaryKey = 'plan_id';
 
     public $incrementing = false;
 
     protected $keyType = 'string';
+
+    public $timestamps = false;
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'user_id');
     }
 
-    public function targets():HasMany
+    public function training_days(): HasMany
     {
-        return $this->hasMany(Target::class, 'stat_id', 'stat_id');
+        return $this->hasMany(Training_day::class, 'plan_id', 'plan_id');
     }
 }

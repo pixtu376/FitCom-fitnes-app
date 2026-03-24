@@ -13,12 +13,11 @@ return new class extends Migration
     {
         Schema::create('bju', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignUuid('user_id')->constrained('user', 'user_id')->cascadeOnDelete();
             $table->integer('protein');
             $table->integer('calories');
             $table->integer('fats');
             $table->integer('carbohydrates');
-            $table->timestamps();
         });
     }
 

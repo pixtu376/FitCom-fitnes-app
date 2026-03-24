@@ -2,25 +2,43 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory;
+    use HasApiTokens, HasFactory, HasUuids;
 
-    protected $fillable = ['name', 'email', 'password', 'weight', 'sport_id', 'role_id'];
+    protected $table = 'user';
 
-    public function bju() {
-        return $this->hasMany(Bju::class);
+    protected $fillable = ['user_id', 'name', 'email', 'password', 'sport_id', 'role_id', 'gender', 'avatar_url', 'birth_day'];
+
+    protected $primaryKey = 'user_id';
+
+    public $incrementing = false;
+
+    protected $keyType = 'string';
+
+    public function bju(): HasMany
+    {
+        return $this->hasMany(Bju::class, 'user_id', 'user_id');
     }
 
-    public function plans() {
-        return $this->hasMany(Plan::class);
+    public function training_plans(): HasMany
+    {
+        return $this->hasMany(Training_plan::class, 'user_id', 'user_id');
     }
 
-    public function stats() {
-        return $this->hasMany(Stat::class);
+    public function stats(): HasMany
+    {
+        return $this->hasMany(Stat::class, 'user_id', 'user_id');
+    }
+
+    public function targets(): HasMany
+    {
+        return $this->hasMany(Target::class, 'user_id', 'user_id');
     }
 }

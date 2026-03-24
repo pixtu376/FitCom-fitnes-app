@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('stat', function (Blueprint $table) {
-            $table->uuid('stat_id')->primary();
+        Schema::create('target', function (Blueprint $table) {
+            $table->uuid('target_id')->primary();
             $table->foreignUuid('user_id')->constrained('user', 'user_id')->cascadeOnDelete();
-            $table->string('name_stat');
-            $table->float('value');
-            $table->string('unit');
-            $table->timestamps();
+            $table->foreignUuid('stat_id')->constrained('stat', 'stat_id')->cascadeOnDelete();
+            $table->enum('type_target', ['main', 'important', 'no important']);
+            $table->string('name_target');
+            $table->string('target_value');
         });
     }
 
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('stat');
+        Schema::dropIfExists('target');
     }
 };

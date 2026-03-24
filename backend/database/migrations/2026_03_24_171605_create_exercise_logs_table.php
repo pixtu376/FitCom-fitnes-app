@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('exercise', function (Blueprint $table) {
-            $table->uuid('exercise_id')->primary();
-            $table->string('name_exercise');
+        Schema::create('exercise_log', function(Blueprint $table){
+           $table->uuid('exercise_log_id')->primary(); 
+           $table->foreignUuid('training_day_id')->constrained('training_day', 'training_day_id')->cascadeOnDelete();
+           $table->string('result');
+           $table->string('comment');
         });
     }
 
@@ -22,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('exercise');
+        Schema::dropIfExists('exercise_log');
     }
 };
