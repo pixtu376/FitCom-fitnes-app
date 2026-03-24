@@ -14,7 +14,6 @@ export default function NextWorkout({ plan }) {
     },
     onError: (error) => {
       console.error("Ошибка при сохранении веса:", error);
-      alert("Не удалось сохранить вес");
     }
   });
 
@@ -28,40 +27,42 @@ export default function NextWorkout({ plan }) {
     }
   };
 
-  if (!plan) {
+  if (!plan || !plan.training_days?.[0]) {
     return (
       <div className={styles.container}>
-        <div className={styles.info}>Планов на сегодня нет</div>
+        <div className={styles.info}>Тренировок пока не запланировано</div>
       </div>
     );
   }
 
-  const exercises = plan.exercises || [];
+  const currentDay = plan.training_days[0];
+  const exercises = currentDay.workout_exercises || [];
 
   return (
     <div className={styles.container}>
       <div className={styles.info}>
         Ближайшая: <span className={styles.accent}>{plan.name || "Тренировка"}</span>
+        <div className={styles.daySub}>День: {currentDay.day_name}</div>
       </div>
       
       <div className={styles.list}>
-        {exercises.map((ex, index) => (
-          <div key={ex.id || index} className={styles.item}>
+        {exercises.map((item, index) => (
+          <div key={item.workout_exercise_id} className={styles.item}>
             <span className={styles.name}>
-              {index + 1}. {ex.name} 
+              {index + 1}. {item.exercise?.name_exercise || "Упражнение"} 
             </span>
             
             <div className={styles.controls}>
               <button className={styles.addBtn}>+</button>
               <span className={styles.sets}>
-                {ex.sets ? `${ex.sets}×` : ""}{ex.reps}
+                {item.sets ? `${item.sets}×` : ""}{item.repeats || 0}
               </span>
               <input 
                 type="text" 
                 className={styles.input} 
-                defaultValue={ex.weight ? `${ex.weight}кг` : ""} 
+                defaultValue={item.weight ? `${item.weight}кг` : ""} 
                 placeholder="--"
-                onBlur={(e) => handleBlur(e, ex.id)} 
+                onBlur={(e) => handleBlur(e, item.workout_exercise_id)} 
                 onKeyDown={(e) => e.key === 'Enter' && e.target.blur()}
               />
             </div>

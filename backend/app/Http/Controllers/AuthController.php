@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\Exercise;
+use App\Models\Workout_exercise;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -13,19 +14,28 @@ class AuthController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|unique:users',
-            'password' => 'required|string|min:8'
+            'email' => 'required|string|email|unique:user,email',
+            'password' => 'required|string|min:8',
+            'gender' => 'required|in:male,female',
+            'birth_day' => 'required|date',
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'gender' => $request->gender,
+            'birth_day' => $request->birth_day,
+            'avatar_url' => 'default.png',
+            'role_id' => 1,
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        return response()->json(['user' => $user, 'token' => $token], 201);
+        return response()->json([
+            'user' => $user,
+            'token' => $token
+        ], 201);
     }
 
     public function login(Request $request)
@@ -41,29 +51,39 @@ class AuthController extends Controller
             return response()->json(['message' => 'Неверный логин или пароль'], 401);
         }
 
+        $user->tokens()->delete();
+
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        return response()->json(['user' => $user, 'token' => $token]);
+        return response()->json([
+            'user' => $user, 
+            'token' => $token
+        ]);
     }
 
     public function profile(Request $request)
     {
         return $request->user()->load([
-            'plans.exercises',
-            'bju',
-            'stats'
+            'training_plans.training_days.workout_exercises.exercise',
+            'stats',
+            'bju'
         ]);
     }
+
     public function updateWeight(Request $request, $id)
     {
         $request->validate([
             'weight' => 'required|numeric',
         ]);
-        $exercise = Exercise::findOrFail($id);
-        $exercise->weight = $request->weight;
-        $exercise->save();
 
-        return response()->json(['message' => 'Вес обновлен', 'weight' => $exercise->weight]);
+        $workoutExercise = Workout_exercise::findOrFail($id);
+        $workoutExercise->weight = $request->weight;
+        $workoutExercise->save();
+
+        return response()->json([
+            'message' => 'Рабочий вес обновлен', 
+            'weight' => $workoutExercise->weight
+        ]);
     }
 
     public function logout(Request $request)

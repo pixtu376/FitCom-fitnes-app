@@ -9,7 +9,7 @@ export default function WeightChart({ data }) {
     
     return data.map(item => ({
       name: new Date(item.created_at).toLocaleDateString('ru-RU', { month: 'short', day: 'numeric' }),
-      weight: parseFloat(item.weight)
+      weight: parseFloat(item.value)
     }));
   }, [data]);
 

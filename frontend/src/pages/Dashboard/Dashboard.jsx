@@ -40,7 +40,7 @@ export default function Dashboard() {
           <div className={styles.card}>
             <h3 className={styles.cardTitle}>Ближайшая тренировка:</h3>
             <div className={styles.listContainer}>
-              <NextWorkout plan={user?.plans?.[0]} />
+              <NextWorkout plan={user?.training_plans?.[0]} />
             </div>
           </div>
           <div className={styles.card}>
