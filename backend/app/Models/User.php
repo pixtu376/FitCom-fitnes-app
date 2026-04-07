@@ -41,4 +41,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Target::class, 'user_id', 'user_id');
     }
+
+    public function photos():HasMany
+    {
+        return $this->hasMany(Photo_stat::class, 'photo_id', 'photo_id');
+    }
 }

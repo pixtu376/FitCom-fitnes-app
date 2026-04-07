@@ -1,0 +1,145 @@
+.overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
+
+.modal {
+    background-color: #1a1d21;
+    border-radius: 16px;
+    width: 90%;
+    /* Ограничил ширину, чтобы не была на весь экран */
+    max-width: 450px; 
+    padding: 20px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+    border: 1px solid #333;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.header h2 { font-size: 1.1rem; margin: 0; }
+
+.closeBtn {
+    background: none;
+    border: none;
+    color: #64748b;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 4px;
+}
+
+.label {
+    font-size: 10px;
+    color: #94a3b8;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.input {
+    background-color: #0f1113;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: #fff;
+    outline: none;
+    font-size: 14px;
+}
+
+.input:focus { border-color: #38A169; }
+
+.scrollArea {
+    overflow-y: auto;
+    flex: 1;
+    margin-bottom: 16px;
+    padding-right: 4px;
+}
+
+.dayCard {
+    background-color: #25292e;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 12px;
+}
+
+.dayHeader {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.selectDay {
+    background-color: #1a1d21;
+    border: 1px solid #444;
+    color: #38A169;
+    font-weight: bold;
+    border-radius: 6px;
+    padding: 4px;
+}
+
+/* Сетка упражнений теперь без подходов */
+.exerciseRow {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.exName { flex: 3; }
+.exVal { width: 70px; text-align: center; }
+
+.addExBtn {
+    background: none;
+    border: 1px dashed #444;
+    color: #94a3b8;
+    padding: 6px;
+    border-radius: 6px;
+    font-size: 11px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.addDayBtn {
+    background-color: transparent;
+    border: 1px solid #38A169;
+    color: #38A169;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.submitBtn {
+    background-color: #38A169;
+    border: none;
+    color: #fff;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+}

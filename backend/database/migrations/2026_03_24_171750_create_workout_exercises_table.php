@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignUuid('exercise_id')->constrained('exercise', 'exercise_id')->cascadeOnDelete();
             $table->foreignUuid('training_day_id')->constrained('training_day', 'training_day_id')->cascadeOnDelete();
             $table->float("weight");
-            $table->integer('repeats');
-            $table->timestamps();
+            $table->string('repeats');
+            $table->timestamp('created_at')->nullable();
         });
     }
 

@@ -11,6 +11,7 @@ class Exercise extends Model
     use HasUuids;
 
     protected $table = 'exercise'; 
+    public $timestamps = false;
 
     protected $fillable = ['exercise_id', 'name_exercise'];
     
@@ -19,8 +20,6 @@ class Exercise extends Model
     public $incrementing = false;
 
     protected $keyType = 'string';
-
-    public $timestamps = false;
 
     public function workout_exercises(): HasMany
     {

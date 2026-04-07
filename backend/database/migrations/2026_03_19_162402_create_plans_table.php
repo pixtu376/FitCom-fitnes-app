@@ -17,6 +17,9 @@ return new class extends Migration
             $table->date('start_date');
             $table->date('end_date');
             $table->string('name');
+            $table->boolean('is_favorite')->default(false);
+            $table->boolean('is_active')->default(false);;
+            $table->timestamp('created_at')->nullable();
         });
     }
 

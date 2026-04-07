@@ -13,15 +13,14 @@ class Training_day extends Model
 
     protected $table = 'training_day';
     
-    protected $fillable = ['training_day_id', 'icon', 'color', 'count_day', 'plan_id'];
+    protected $fillable = ['training_day_id', 'icon', 'color', 'count_day', 'week_day', 'plan_id', 'name'];
 
     protected $primaryKey = 'training_day_id';
 
     public $incrementing = false;
 
     protected $keyType = 'string';
-    
-    public $timestamps = false; 
+    public $timestamps = false;
 
     public function training_plan(): BelongsTo 
     {

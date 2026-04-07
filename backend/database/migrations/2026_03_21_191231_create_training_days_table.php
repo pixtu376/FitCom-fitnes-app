@@ -14,9 +14,12 @@ return new class extends Migration
         Schema::create('training_day', function(Blueprint $table){
             $table->uuid('training_day_id')->primary();
             $table->integer("count_day");
+            $table->string('week_day')->nullable();
             $table->foreignUuid("plan_id")->constrained('training_plan', 'plan_id')->onDelete('cascade');
             $table->string("icon");
             $table->string("color");
+            $table->string("name")->nullable();;
+            $table->timestamp('created_at')->nullable();
         });
     }
 

@@ -19,6 +19,7 @@ class Workout_exercise extends Model
     public $incrementing = false;
 
     protected $keyType = 'string';
+    public $timestamps = false;
 
     public function training_day():BelongsTo
     {

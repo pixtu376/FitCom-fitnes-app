@@ -73,22 +73,22 @@ class AuthController extends Controller
     public function updateWeight(Request $request, $id)
     {
         $request->validate([
-            'weight' => 'required|numeric',
+            'weight' => 'nullable|numeric',
+            'repeats' => 'nullable|string',
         ]);
 
-        $workoutExercise = Workout_exercise::findOrFail($id);
-        $workoutExercise->weight = $request->weight;
-        $workoutExercise->save();
+        $user = $request->user();
+
+        $workoutExercise = Workout_exercise::where('workout_exercise_id', $id)
+            ->whereHas('training_day.training_plan', function($q) use ($user) {
+                $q->where('user_id', $user->user_id);
+            })->firstOrFail();
+
+        $workoutExercise->update($request->only(['weight', 'repeats']));
 
         return response()->json([
-            'message' => 'Рабочий вес обновлен', 
-            'weight' => $workoutExercise->weight
+            'message' => 'Данные обновлены', 
+            'data' => $workoutExercise
         ]);
-    }
-
-    public function logout(Request $request)
-    {
-        $request->user()->currentAccessToken()->delete();
-        return response()->json(['message' => 'Вышли из системы']);
     }
 }

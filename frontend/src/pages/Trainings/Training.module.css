@@ -1,0 +1,298 @@
+.layout {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  background-color: #1A1D21; /* Чуть светлее чем dashboard, судя по макету */
+  overflow: hidden;
+  color: #fff;
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 32px;
+  height: 100%;
+  box-sizing: border-box;
+  max-width: 1600px;
+  margin: 0 auto;
+  overflow-y: auto;
+}
+
+/* Карточки-контейнеры */
+.card {
+  background-color: #22252A;
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.cardTitle {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  color: #E2E8F0;
+}
+
+/* Сетка для нижней части */
+.contentGrid {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 24px;
+  flex: 1;
+}
+
+.leftCol {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.rightCol {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Еженедельный план (Топ виджет) */
+.weeklyContainer {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.dayCard {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.dayLabel {
+  font-size: 16px;
+  color: #94A3B8;
+}
+
+.dayBadge {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Управление планом */
+.managementGrid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+}
+
+.btnGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.btn {
+  background-color: #1A1D21;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.btn:hover {
+  background-color: #2D3136;
+}
+
+.photoUpload {
+  border: 1px dashed #38A169;
+  border-radius: 8px;
+  width: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  background-color: rgba(56, 161, 105, 0.05);
+  transition: 0.2s;
+}
+
+.photoUpload:hover { background-color: rgba(56, 161, 105, 0.1); }
+.photoUpload span { font-size: 12px; text-align: center; color: #E2E8F0; }
+
+.input {
+  width: 100%;
+  background-color: #1A1D21;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  color: #fff;
+  margin-top: 16px;
+  outline: none;
+}
+
+/* Архив планов */
+.archiveList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  max-height: 200px;
+  padding-right: 8px;
+}
+
+.archiveItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.archiveIcons {
+  display: flex;
+  gap: 12px;
+}
+
+/* Настройка упражнений */
+.settingsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.subtitle { color: #E2E8F0; font-size: 16px; }
+.accentGreen { color: #38A169; }
+
+.tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.tabBtn {
+  flex: 1;
+  background-color: transparent;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: #94A3B8;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.tabBtn.active {
+  border-color: #4A5568;
+  background-color: rgba(255,255,255,0.05);
+  color: #fff;
+}
+
+.dayHeaderBar {
+  background-color: rgba(56, 161, 105, 0.15); /* Зеленоватый фон */
+  padding: 12px 24px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.deleteDayText { color: #FC8181; cursor: pointer; font-size: 14px; }
+
+.exerciseList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.exerciseRow {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  gap: 16px;
+  align-items: center;
+  font-size: 14px;
+}
+
+.editBadge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #1A1D21;
+  padding: 6px 12px;
+  border-radius: 6px;
+  color: #E2E8F0;
+}
+
+.iconSmall { width: 16px; height: 16px; cursor: pointer; opacity: 0.7; }
+.iconSmall:hover { opacity: 1; }
+
+.newExerciseInput {
+  background-color: #1A1D21;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 12px;
+  color: #fff;
+  width: 100%;
+  outline: none;
+}
+
+.badgeDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.archiveCard {
+  flex: 1; /* Чтобы карточка архива тянулась на всю доступную высоту под управлением */
+}
+
+/* Общие правила для контейнеров с иконками (круги выбора и табы) */
+.btn, .tabBtn, .iconCircle {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  box-sizing: border-box !important;
+  overflow: hidden; /* Чтобы ничего не вылетало за границы */
+}
+
+/* Настройка иконок внутри кнопок выбора (IconPicker) */
+.iconPickerItem {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  padding: 8px; /* Это поле контролирует визуальный размер иконки */
+  transition: all 0.2s ease;
+}
+
+/* Сами иконки внутри круга */
+.iconPickerItem svg {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100%;
+  max-height: 100%;
+}

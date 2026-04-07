@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('exercise', function (Blueprint $table) {
             $table->uuid('exercise_id')->primary();
             $table->string('name_exercise');
+            $table->timestamp('created_at')->nullable();
         });
     }
 

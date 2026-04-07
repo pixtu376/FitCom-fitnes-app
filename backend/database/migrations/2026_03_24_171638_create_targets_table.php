@@ -16,8 +16,9 @@ return new class extends Migration
             $table->foreignUuid('user_id')->constrained('user', 'user_id')->cascadeOnDelete();
             $table->foreignUuid('stat_id')->constrained('stat', 'stat_id')->cascadeOnDelete();
             $table->enum('type_target', ['main', 'important', 'no important']);
+            $table->boolean('is_active')->default(true);;
             $table->string('name_target');
-            $table->string('target_value');
+            $table->float('target_value');
         });
     }
 
