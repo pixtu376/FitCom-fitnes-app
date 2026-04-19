@@ -12,7 +12,7 @@ class Target extends Model
 
     protected $table = 'target';
 
-    protected $fillable = ['target_id', 'user_id', 'stat_id', 'type_target', 'name_target', 'target_value']; 
+    protected $fillable = ['target_id', 'user_id', 'stat_id', 'type_target', 'name_target', 'target_value', 'is_up']; 
     
     protected $primaryKey = 'target_id';
 

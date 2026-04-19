@@ -1,0 +1,50 @@
+.card {
+  background-color: #2c2c2e;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.title {
+  margin: 0 0 20px 0;
+  font-size: 18px;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.accent {
+  color: #38A169;
+}
+
+.indicatorGroup {
+  margin-bottom: 16px;
+}
+
+.indicatorHeader {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #ffffff;
+}
+
+.progressBar {
+  background-color: #3a3a3c;
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progressFill {
+  background-color: #38A169;
+  height: 100%;
+  border-radius: 4px;
+}
+
+.footerText {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  margin-top: 24px;
+  color: #d1d1d6;
+}

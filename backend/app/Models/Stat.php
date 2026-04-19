@@ -13,7 +13,7 @@ class Stat extends Model
 
     protected $table = 'stat';
 
-    protected $fillable = ['stat_id','user_id', 'name_stat', 'value', 'unit'];
+    protected $fillable = ['stat_id','user_id', 'name_stat', 'value', 'unit', 'type'];
     
     protected $primaryKey = 'stat_id';
 

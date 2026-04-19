@@ -1,0 +1,206 @@
+/* ProgressGallery.module.css */
+.card {
+  background: #1c1c1e;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.cardTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.photoBox {
+  position: relative;
+  width: 100%;
+  padding-top: 125%; /* Соотношение сторон 4:5 (вертикальное) */
+  background: #2c2c2e;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px dashed #3a3a3c; /* Дефолтная граница */
+}
+
+/* Стили для изображения */
+.imgContainer {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Чтобы фото не сплющивалось */
+}
+
+/* Оверлей при наведении на фото */
+.overlay {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.imgContainer:hover .overlay {
+  opacity: 1;
+}
+
+.dateLabel {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(0,0,0,0.5);
+  padding: 2px 6px;
+  border-radius: 4px;
+  align-self: flex-start;
+}
+
+.delBtn {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(229, 62, 62, 0.8); /* Red 600 */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  transition: background 0.2s;
+}
+
+.delBtn:hover {
+  background: #e53e3e;
+}
+
+/* Стили для заглушки (Placeholder) */
+.placeholder {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  background: #2c2c2e;
+}
+
+.placeholderContent {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.placeholderIcon {
+  font-size: 40px;
+  color: #48484a;
+  margin-bottom: 5px;
+}
+
+.placeholderText {
+  font-size: 14px;
+  color: #8e8e93;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Кнопка Добавить внутри заглушки */
+.addBtn {
+  margin-top: 10px;
+  background: #38A169; /* Green 600 */
+  color: white;
+  border: none;
+  border-radius: 20px; /* Скругленная кнопка */
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex; align-items: center; gap: 6px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.addBtn:hover {
+  background: #48BB78; /* Green 500 */
+}
+
+.addBtn:active {
+  transform: scale(0.96);
+}
+
+.addBtn:disabled {
+  background: #48484a;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Спиннер загрузки */
+.spinner {
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top: 2px solid white;
+  width: 16px; height: 16px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: auto;
+  margin-bottom: 20px;
+}
+
+.actionBtn {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
+  border: none;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  transition: all 0.2s;
+}
+
+.actionBtn:hover {
+  background: #48CB9F; /* Твой неоновый цвет */
+  transform: scale(1.1);
+}
+
+.delBtn:hover {
+  background: #ff4d4d;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+  transition: opacity 0.3s;
+}
+
+.imgContainer:hover .overlay {
+  opacity: 1;
+}

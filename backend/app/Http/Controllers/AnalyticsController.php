@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Photo_stat;
 use App\Models\Stat;
 use Illuminate\Support\Facades\Storage;
-use Psy\Util\Str;
+use Illuminate\Support\Str;
 
 class AnalyticsController extends Controller
 {
@@ -26,7 +26,7 @@ class AnalyticsController extends Controller
 
         $stats = Stat::where('user_id', $user->user_id)
         ->whereDate('created_at', '<=', $date)
-        ->select('name_stat', 'value', 'unit', 'creates_at')
+        ->select('name_stat', 'value', 'unit', 'created_at')
         ->orderBy('created_at', 'desc')
         ->get()
         ->unique('name_stat');
@@ -34,31 +34,32 @@ class AnalyticsController extends Controller
         return response()->json($stats->values());
     }
 
-    public function create_stat (Request $request, $id_req)
+    public function create_stat (Request $request)
     {
-        $user= $request->user();
+        $user = $request->user();
 
-        $request->validation([
-            'measurements'=> 'required|array',
+        $validated = $request->validate([
+            'measurements' => 'required|array',
             'measurements.*.name_stat' => 'required|string',
             'measurements.*.value' => 'required|numeric',
             'measurements.*.unit' => 'required|string'
         ]);
 
-        return DB::transaction(function() use ($request, $user){
+        return DB::transaction(function() use ($validated, $user) {
             $createdStats = [];
 
-            foreach ($request->input('measurements') as $data) {
+            foreach ($validated['measurements'] as $data) {
                 $createdStats[] = Stat::create([
-                    'user_id' => $user->user_id,
-                    'name_value' => $request->input('name_value'),
-                    'value' => $request->input('value'),
-                    'unit' => $request->input('value')
+                    'user_id'   => $user->user_id,
+                    'name_stat' => $data['name_stat'], // Берем из $data
+                    'value'     => $data['value'],
+                    'unit'      => $data['unit'],
+                    'type'      => 'default' // или другой дефолт
                 ]);
             }
             return response()->json([
-                'message'=>'Сохранено',
-                'data'=>$createdStats
+                'message' => 'Сохранено',
+                'data'    => $createdStats
             ], 200);
         });
     }
@@ -105,7 +106,7 @@ class AnalyticsController extends Controller
     {
         $user = $request->user();
 
-        $photo = Photo_stat::where("photo_stat_id", $id)
+        $photo = Photo_stat::where("photo_id", $id)
             ->where('user_id', $user->user_id)
             ->first();
         if (!$photo) {
@@ -129,10 +130,27 @@ class AnalyticsController extends Controller
         $photos = Photo_stat::where('user_id', $user->user_id)
         ->get()
         ->map(function ($photo) {
-            $photo->url = Storage::url('stats/' . $photo->name_photo);
+            $photo->url = asset(Storage::url('stats/' . $photo->name_photo));
             return $photo;
         });
 
         return response()->json($photos);
+    }
+
+    public function destroy_stat_by_name(Request $request)
+    {
+        $user = $request->user();
+        
+        $validated = $request->validate([
+            'names' => 'required|array',
+            'names.*' => 'required|string'
+        ]);
+
+        // Удаляем все записи для этого пользователя, где имя совпадает с выбранными
+        Stat::where('user_id', $user->user_id)
+            ->whereIn('name_stat', $validated['names'])
+            ->delete();
+
+        return response()->json(['message' => 'Выбранные параметры удалены']);
     }
 }

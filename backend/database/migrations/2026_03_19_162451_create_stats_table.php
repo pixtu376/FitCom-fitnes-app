@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('name_stat');
             $table->float('value');
             $table->string('unit');
+            $table->enum('type', ['main', 'important', 'default']);
             $table->timestamps();
         });
     }

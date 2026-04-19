@@ -12,7 +12,7 @@ class Photo_stat extends Model
 
     protected $table = 'photo_stat';
 
-    protected $fillable = ['photo_id', 'user_id', 'photo_name', 'is_before'];
+    protected $fillable = ['photo_id', 'user_id', 'name_photo', 'is_before'];
 
     protected $primaryKey = 'photo_id';
 

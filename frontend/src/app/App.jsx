@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "../pages/Auth/Login";
 import Register from "../pages/Auth/Register";
 import Dashboard from "../pages/Dashboard/Dashboard";
+import Analytics from "../pages/Analytics/Analytics";
 import TrainingPage from "../pages/Trainings/TrainingPage";
 import "./styles/index.css";
 
@@ -13,6 +14,7 @@ export default function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/training" element={<TrainingPage />} />
+      <Route path="/analytics" element={<Analytics />} />
     </Routes>
   );
 }

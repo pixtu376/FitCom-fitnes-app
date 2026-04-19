@@ -1,0 +1,133 @@
+.card {
+  background-color: #2c2c2e;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.panelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.dateSelector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #ffffff;
+}
+
+.select {
+  background-color: transparent;
+  color: #fff;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.measurementsForm {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.inputGroup label {
+  font-size: 14px;
+  color: #d1d1d6;
+}
+
+.input {
+  background-color: #1c1c1e;
+  border: 1px solid #3a3a3c;
+  color: #fff;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 16px;
+  outline: none;
+}
+
+.formActions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.saveBtn {
+  background-color: #38A169;
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.changeParamsBtn {
+  background: none;
+  border: none;
+  color: #636366;
+  text-decoration: underline;
+  cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+  .measurementsForm {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.cardTitle {
+  margin: 0;
+  color: #fff;
+}
+
+.addStatBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid #48CB9F; /* Акцентный цвет */
+  color: #48CB9F;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.addStatBtn:hover {
+  background: rgba(72, 203, 159, 0.1);
+  transform: translateY(-1px);
+}
+
+.emptyState {
+  color: #8e8e93;
+  text-align: center;
+  padding: 20px 0;
+  font-size: 0.95rem;
+}

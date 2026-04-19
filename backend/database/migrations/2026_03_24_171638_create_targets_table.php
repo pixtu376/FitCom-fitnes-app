@@ -19,6 +19,7 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);;
             $table->string('name_target');
             $table->float('target_value');
+            $table->boolean('is_up')->default(false);
         });
     }
 
