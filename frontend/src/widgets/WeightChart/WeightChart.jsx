@@ -1,76 +1,97 @@
-import React from "react";
+import React, { useState, useMemo } from "react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip } from "recharts";
 import styles from "./WeightChart.module.css";
 
-export default function WeightChart({ data }) {
-  
-  const chartData = React.useMemo(() => {
-    if (!data || data.length === 0) return [];
+export default function WeightChart({ data = [] }) {
+  const groupedData = useMemo(() => {
+    if (!data || !Array.isArray(data) || data.length === 0) return {};
     
-    return data.map(item => ({
-      name: new Date(item.created_at).toLocaleDateString('ru-RU', { month: 'short', day: 'numeric' }),
-      weight: parseFloat(item.value)
-    }));
+    const groups = data.reduce((acc, item) => {
+      const category = item.name_stat || "Общее"; 
+      if (!acc[category]) acc[category] = [];
+      
+      acc[category].push({
+        date: new Date(item.created_at).toLocaleDateString('ru-RU', { month: 'short' }),
+        value: parseFloat(item.value),
+        rawDate: new Date(item.created_at)
+      });
+      return acc;
+    }, {});
+
+    Object.keys(groups).forEach(key => {
+      groups[key].sort((a, b) => a.rawDate - b.rawDate);
+    });
+
+    return groups;
   }, [data]);
 
-  if (chartData.length === 0) {
+  const categories = Object.keys(groupedData);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  if (categories.length === 0) {
     return (
-      <div className={styles.wrapper}>
-        <div className={styles.empty}>Нет данных для аналитики</div>
-      </div>
+      <div className={styles.empty}>Нет данных для анализа</div>
     );
   }
 
+  const handlePrev = () => setCurrentIndex(prev => (prev - 1 + categories.length) % categories.length);
+  const handleNext = () => setCurrentIndex(prev => (prev + 1) % categories.length);
+
+  const currentCategory = categories[currentIndex];
+  const chartData = groupedData[currentCategory] || [];
+
   return (
-    <div className={styles.wrapper}>
+    <div className={styles.container}>
       <div className={styles.header}>
-        <span className={styles.arrow}>&lt;</span>
-        <span>История веса (кг)</span>
-        <span className={styles.arrow}>&gt;</span>
+        <button onClick={handlePrev} className={styles.arrow}>&lt;</button>
+        <span className={styles.title}>
+          {currentCategory} {currentCategory === "Вес" ? "(кг)" : "(см)"}
+        </span>
+        <button onClick={handleNext} className={styles.arrow}>&gt;</button>
       </div>
-      <div className={styles.chartContainer}>
+
+      <div className={styles.chartWrapper}>
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={chartData} margin={{ top: 0, right: 0, left: -30, bottom: 0 }}>
+          <AreaChart data={chartData} margin={{ top: 10, right: 0, left: -25, bottom: 0 }}>
             <defs>
-              <linearGradient id="colorWeight" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#4ade80" stopOpacity={0.3}/>
-                <stop offset="95%" stopColor="#4ade80" stopOpacity={0}/>
+              <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#48CB9F" stopOpacity={0.3}/>
+                <stop offset="95%" stopColor="#48CB9F" stopOpacity={0}/>
               </linearGradient>
             </defs>
-            
-            <CartesianGrid strokeDasharray="3 3" stroke="#2d3139" vertical={false} />
-            
+            <CartesianGrid strokeDasharray="0" stroke="rgba(255,255,255,0.05)" vertical={false} />
             <XAxis 
-              dataKey="name" 
-              stroke="#9ca3af" 
-              fontSize={10} 
+              dataKey="date" 
+              stroke="#64748b" 
+              fontSize={12} 
               tickLine={false} 
               axisLine={false} 
               dy={10}
             />
-
             <YAxis 
-              stroke="#9ca3af" 
-              fontSize={10} 
+              stroke="#64748b" 
+              fontSize={12} 
               tickLine={false} 
-              axisLine={false}
-              domain={['dataMin - 1', 'dataMax + 1']}
+              axisLine={false} 
+              domain={['dataMin - 2', 'dataMax + 2']} 
             />
-
             <Tooltip 
-              contentStyle={{ backgroundColor: '#1e2126', border: 'none', borderRadius: '8px', fontSize: '12px' }}
-              itemStyle={{ color: '#4ade80' }}
-              labelStyle={{ color: '#9ca3af', marginBottom: '4px' }}
-              formatter={(value) => [`${value} кг`, 'Вес']}
+              contentStyle={{ 
+                backgroundColor: '#1A1D21', 
+                border: '1px solid rgba(255,255,255,0.1)', 
+                borderRadius: '12px',
+                fontSize: '14px'
+              }}
+              itemStyle={{ color: '#48CB9F' }}
+              cursor={{ stroke: 'rgba(72, 203, 159, 0.2)', strokeWidth: 2 }}
             />
-
             <Area 
               type="monotone" 
-              dataKey="weight" 
-              stroke="#4ade80" 
-              fill="url(#colorWeight)" 
+              dataKey="value" 
+              stroke="#48CB9F" 
+              fill="url(#colorValue)" 
               strokeWidth={3} 
-              dot={{ r: 4, fill: '#4ade80', strokeWidth: 2, stroke: '#111' }} // Точки на графике
+              dot={{ r: 4, fill: '#48CB9F', strokeWidth: 2, stroke: '#22252A' }}
               activeDot={{ r: 6, strokeWidth: 0 }}
             />
           </AreaChart>

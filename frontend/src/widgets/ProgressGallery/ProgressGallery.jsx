@@ -22,7 +22,7 @@ export default function ProgressGallery({ photos, onDelete, refetch }) {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       e.target.value = ''; 
-      if (refetch) refetch(); // Теперь это сработает
+      if (refetch) refetch();
     } catch (err) {
       console.error("Ошибка загрузки:", err.response?.data);
     } finally {
@@ -56,7 +56,6 @@ export default function ProgressGallery({ photos, onDelete, refetch }) {
                 <img src={slot.data.url} alt={slot.label} className={styles.image} />
                 <div className={styles.overlay}>
                   <div className={styles.actions}>
-                    {/* КНОПКА ОБНОВЛЕНИЯ */}
                     <button 
                       onClick={() => openUpload(slot.type)} 
                       className={styles.actionBtn} 
@@ -64,9 +63,8 @@ export default function ProgressGallery({ photos, onDelete, refetch }) {
                     >
                       <FiRefreshCw />
                     </button>
-                    {/* КНОПКА УДАЛЕНИЯ */}
                     <button 
-                      onClick={() => onDelete(slot.data.photo_id)} // Используем пропс из AnalyticsPage
+                      onClick={() => onDelete(slot.data.photo_id)}
                       className={`${styles.actionBtn} ${styles.delBtn}`}
                       title="Удалить"
                     >

@@ -7,7 +7,6 @@ export default function CreatePlanModal({ onClose, refetchPlans }) {
     const [startDate, setStartDate] = useState(new Date().toISOString().split('T')[0]);
     const [endDate, setEndDate] = useState("");
     
-    // Начальное состояние с одним пустым упражнением
     const [cycle, setCycle] = useState([
         { 
             id: Date.now(), 
@@ -19,7 +18,6 @@ export default function CreatePlanModal({ onClose, refetchPlans }) {
 
     const weekDays = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
 
-    // Считаем общее кол-во дней между датами
     const totalDaysCount = useMemo(() => {
         if (!startDate || !endDate) return 0;
         const start = new Date(startDate);
@@ -57,7 +55,6 @@ export default function CreatePlanModal({ onClose, refetchPlans }) {
 
         const finalDays = [];
         
-        // Используем разбивку строки, чтобы избежать проблем с таймзонами
         const [year, month, day] = startDate.split('-').map(Number);
         const start = new Date(year, month - 1, day); 
 
@@ -65,11 +62,9 @@ export default function CreatePlanModal({ onClose, refetchPlans }) {
             const current = new Date(start);
             current.setDate(start.getDate() + i);
             
-            // Массив дней недели (0 - Вс, 1 - Пн ...)
             const daysMap = ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
             const currentDayName = daysMap[current.getDay()];
 
-            // Ищем шаблон для этого дня недели
             const template = cycle.find(c => c.week_day === currentDayName);
 
             if (template) {
@@ -92,7 +87,7 @@ export default function CreatePlanModal({ onClose, refetchPlans }) {
             }
         }
 
-        console.log("Данные для отправки:", finalDays); // ПРОВЕРЬ ТУТ В КОНСОЛИ ПЕРЕД ОТПРАВКОЙ
+        console.log("Данные для отправки:", finalDays);
 
         try {
             await api.post('/plans', {

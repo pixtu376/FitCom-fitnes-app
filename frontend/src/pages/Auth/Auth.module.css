@@ -4,7 +4,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--bg-dark); /* Используем переменные из index.css */
+  background-color: var(--bg-dark);
 }
 
 .authCard {

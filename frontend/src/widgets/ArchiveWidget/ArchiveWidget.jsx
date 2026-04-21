@@ -7,7 +7,6 @@ export default function ArchiveWidget({ plans = [], refetchPlans, currentPlanId,
     const handleFavorite = async (e, planId, currentStatus) => {
         e.stopPropagation();
         try {
-            // Отправляем инвертированный статус
             await api.patch(`/plans/${planId}/favorite`, { is_favorite: !currentStatus });
             refetchPlans();
         } catch (err) { console.error(err); }
@@ -39,7 +38,6 @@ export default function ArchiveWidget({ plans = [], refetchPlans, currentPlanId,
                         </div>
                         
                         <div className={styles.archiveIcons}>
-                            {/* Удаление */}
                             <img
                                 src="/icons/trash.svg"
                                 alt="del"
@@ -47,11 +45,9 @@ export default function ArchiveWidget({ plans = [], refetchPlans, currentPlanId,
                                 onClick={(e) => handleDelete(e, plan.plan_id)}
                             />
                             
-                            {/* Избранное: меняем путь к файлу в зависимости от plan.is_favorite */}
                             <img 
                                 src={plan.is_favorite ? "/icons/star-filled.svg" : "/icons/star.svg"} 
                                 alt="fav" 
-                                // Добавляем класс accentGreen если избранное, чтобы иконка подсветилась
                                 className={`${styles.iconSmall} ${plan.is_favorite ? styles.accentGreen : ''}`}
                                 onClick={(e) => handleFavorite(e, plan.plan_id, plan.is_favorite)}
                             />

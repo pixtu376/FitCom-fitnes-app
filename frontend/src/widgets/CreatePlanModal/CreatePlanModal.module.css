@@ -13,7 +13,6 @@
     background-color: #1a1d21;
     border-radius: 16px;
     width: 90%;
-    /* Ограничил ширину, чтобы не была на весь экран */
     max-width: 450px; 
     padding: 20px;
     max-height: 85vh;
@@ -102,7 +101,6 @@
     padding: 4px;
 }
 
-/* Сетка упражнений теперь без подходов */
 .exerciseRow {
     display: flex;
     gap: 8px;

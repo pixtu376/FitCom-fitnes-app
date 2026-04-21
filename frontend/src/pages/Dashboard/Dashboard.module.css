@@ -1,58 +1,121 @@
 .layout {
   display: flex;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
-  background-color: #121417;
+  background-color: #1A1D21;
   overflow: hidden;
-}
-
-.dashboard {
-  flex: 1;
-  display: grid;
-  grid-template-columns: 330px 1fr; 
-  gap: 70px; 
-  padding: 40px;
-  height: 100%;
+  color: #fff;
+  padding: 24px;
   box-sizing: border-box;
-  max-width: 1600px;
-  margin: 0 auto;
+  gap: 24px;
 }
 
-.leftCol {
-  display: grid;
-  gap: 65px;
+.main {
+  flex: 1;
+  min-width: 0;
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-
-.rightCol {
+.contentGrid {
   display: grid;
-  gap: 60px;
+  grid-template-columns: 380px 1fr;
+  gap: 24px;
   height: 100%;
+  min-height: 0;
+  align-items: stretch;
 }
 
-.leftCol {
-  grid-template-rows: auto 1fr; 
-}
-
-.rightCol {
-  grid-template-rows: 1.6fr 1fr; 
+.leftCol, .rightCol {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  height: 100%;
+  min-height: 0;
 }
 
 .card {
-  background-color: #1e2126;
+  background-color: #22252A;
+  border-radius: 20px;
+  padding: 24px;
   border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 24px;
-  padding: 32px;
   display: flex;
   flex-direction: column;
-  min-height: 0;
-  overflow: hidden;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
 .cardTitle {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 500;
-  margin-bottom: 24px;
   color: #fff;
+  margin: 0;
+}
+
+.cardSubtitle {
+  font-size: 13px;
+  color: #888;
+}
+
+.accentText {
+  color: #48CB9F;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.calendarCard {
+  flex: 0 0 auto;
+}
+
+.chartCard {
+  flex: 1; 
+  display: flex;
+  flex-direction: column;
+  min-height: 0; 
+  background-color: #22252A;
+  border-radius: 20px;
+  padding: 24px;
+}
+
+.workoutCard {
+  flex: 2;
+  min-height: 0;
+}
+
+.nutritionCard {
+  flex: 0 0 auto;
+  min-height: 140px;
+}
+
+.chartContainer {
+  flex: 1; 
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  width: 100%;
+}
+
+.listContainer::-webkit-scrollbar {
+  width: 4px;
+}
+.listContainer::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 10px;
+}
+
+@media (max-width: 1200px) {
+  .contentGrid {
+    grid-template-columns: 1fr;
+    overflow-y: auto;
+  }
+  .layout {
+    height: auto;
+    overflow: visible;
+  }
 }

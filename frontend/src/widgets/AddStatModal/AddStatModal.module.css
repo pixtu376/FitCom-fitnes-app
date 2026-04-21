@@ -1,8 +1,8 @@
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(15px);
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -11,72 +11,106 @@
 }
 
 .modal {
-  background: #2a2f32; /* Тот самый темно-серый */
+  background: #22252A;
   width: 100%;
   max-width: 600px;
-  border-radius: 16px;
-  border: 1px solid #3e4448;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 24px;
-  border-bottom: 1px solid #3e4448;
+  padding: 20px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .header h2 {
-  color: #fff;
-  font-size: 18px;
-  font-weight: 400;
+  color: #E2E8F0;
+  font-size: 20px;
+  font-weight: 500;
   margin: 0;
 }
 
 .closeBtn {
-  background: none;
+  background: rgba(255, 255, 255, 0.03);
   border: none;
-  color: #fff;
-  font-size: 24px;
+  color: #94A3B8;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
   cursor: pointer;
   display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.closeBtn:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: #EF4444;
 }
 
 .content {
-  padding: 20px 24px;
-  max-height: 70vh;
+  padding: 24px;
+  max-height: 60vh;
   overflow-y: auto;
 }
 
+.content::-webkit-scrollbar {
+  width: 5px;
+}
+.content::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 10px;
+}
+
 .section {
-  margin-bottom: 24px;
+  margin-bottom: 30px;
+}
+
+.section:last-child {
+  margin-bottom: 0;
 }
 
 .sectionTitle {
-  color: #e0e0e0;
-  font-size: 14px;
-  font-weight: 300;
-  margin-bottom: 12px;
+  color: #94A3B8;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 16px;
+  font-weight: 600;
 }
 
 .checkboxGrid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 10px;
 }
 
-/* Стилизация чекбоксов под референс */
 .checkboxLabel {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   cursor: pointer;
   font-size: 14px;
-  color: #fff;
+  color: #CBD5E1;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 12px;
+  border: 1px solid transparent;
+  transition: all 0.2s;
   user-select: none;
+}
+
+.checkboxLabel:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .checkboxLabel input {
@@ -86,78 +120,146 @@
 .customCheck {
   width: 18px;
   height: 18px;
-  border-radius: 4px;
-  border: 1.5px solid #48CB9F;
-  display: inline-block;
-  position: relative;
-  transition: 0.2s;
+  border-radius: 5px;
+  border: 2px solid #4a4d52;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
 }
 
 .checkboxLabel input:checked + .customCheck {
-  background: #48CB9F;
+  background: #38A169;
+  border-color: #38A169;
+}
+
+.checkboxLabel input:checked + .customCheck.delCheck {
+  background: #E53E3E;
+  border-color: #E53E3E;
+}
+
+.customCheck::after {
+  content: "";
+  width: 10px;
+  height: 5px;
+  border-left: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  transform: rotate(-45deg) translateY(-1px);
+  opacity: 0;
+  transition: 0.2s;
 }
 
 .checkboxLabel input:checked + .customCheck::after {
-  content: "✓";
-  position: absolute;
-  color: #1c1c1e;
-  font-size: 14px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  opacity: 1;
 }
 
-.actionButtons {
+.actions {
   display: flex;
   gap: 12px;
-  margin-top: 10px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.addCustomBtn, .deleteModeBtn {
-  background: #34393c;
-  border: none;
-  color: #a0a0a0;
-  padding: 8px 12px;
-  border-radius: 6px;
+.btnSmall {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: #94A3B8;
+  padding: 10px 16px;
+  border-radius: 10px;
   font-size: 13px;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+  transition: all 0.2s;
 }
 
-.activeDelete {
-  background: #4a2b2b;
-  color: #ff8e8e;
+.btnSmall:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.activeDel {
+  background: rgba(229, 62, 62, 0.1);
+  color: #FC8181;
+  border-color: rgba(229, 62, 62, 0.2);
+}
+
+.customRow {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+}
+
+.customRow input {
+  background: #1A1D21;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 10px 12px;
+  color: #fff;
+  font-size: 13px;
+  outline: none;
+  width: 100%;
+}
+
+.unitInp {
+  max-width: 60px;
+}
+
+.customRow button {
+  background: #38A169;
+  border: none;
+  color: #fff;
+  width: 40px;
+  border-radius: 10px;
+  cursor: pointer;
 }
 
 .footer {
-  padding: 16px 24px;
+  padding: 24px;
   display: flex;
-  gap: 16px;
-  background: rgba(0,0,0,0.1);
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.2);
 }
 
 .cancelBtn, .applyBtn {
   flex: 1;
-  padding: 12px;
-  border-radius: 8px;
+  padding: 14px;
+  border-radius: 12px;
   border: none;
   font-size: 15px;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 600;
+  transition: all 0.2s;
 }
 
 .cancelBtn {
-  background: #b8c0c0;
-  color: #2a2f32;
+  background: rgba(255, 255, 255, 0.05);
+  color: #94A3B8;
+}
+
+.cancelBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
 }
 
 .applyBtn {
-  background: #4d8d7d; /* Приглушенный бирюзовый */
+  background: #38A169;
   color: #fff;
 }
 
 .applyBtn:hover {
-  background: #48CB9F;
+  background: #2F855A;
+  box-shadow: 0 4px 15px rgba(56, 161, 105, 0.3);
+}
+
+.danger {
+  background: #E53E3E;
+}
+
+.danger:hover {
+  background: #C53030;
+  box-shadow: 0 4px 15px rgba(229, 62, 62, 0.3);
 }

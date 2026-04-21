@@ -4,15 +4,11 @@ import styles from './MeasurementsPanel.module.css';
 import AddStatModal from '../AddStatModal/AddStatModal';
 import { FiPlus } from 'react-icons/fi';
 
-// Добавляем isModalOpen и setIsModalOpen в деструктуризацию пропсов
 export default function MeasurementsPanel({ stats, refetch, isModalOpen, setIsModalOpen }) {
   const [formValues, setFormValues] = useState({});
   const [units, setUnits] = useState({});
   const [isSaving, setIsSaving] = useState(false);
-
-  // УДАЛЕНО: const [isModalOpen, setIsModalOpen] = useState(false); 
-  // Теперь используем пропсы из Analytics.jsx
-
+  
   useEffect(() => {
     if (!stats || !stats.length) return;
     const latest = {};
@@ -34,14 +30,12 @@ export default function MeasurementsPanel({ stats, refetch, isModalOpen, setIsMo
         let name = fullName;
         let unit = '—';
 
-        // Более гибкий парсинг скобок
         if (fullName.includes('(')) {
           const parts = fullName.split('(');
-          name = parts[0].trim(); // Забираем всё до скобки
-          unit = parts[1].replace(')', '').trim(); // Забираем всё внутри скобок
+          name = parts[0].trim();
+          unit = parts[1].replace(')', '').trim();
         }
 
-        // Если такого ключа еще нет в форме — добавляем пустое поле
         if (!(name in nextValues)) {
           nextValues[name] = ''; 
           nextUnits[name] = unit;

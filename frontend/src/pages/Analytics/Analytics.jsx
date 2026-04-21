@@ -13,7 +13,6 @@ import KeyIndicators from "../../widgets/KeyIndicators/KeyIndicators";
 export default function AnalyticsPage() {
   const queryClient = useQueryClient();
 
-  // 1. Добавили refetch сюда (переименовали в refetchStats для ясности)
   const { 
     data: stats, 
     isLoading: statsLoading, 
@@ -60,7 +59,6 @@ export default function AnalyticsPage() {
               onDelete={(id) => deletePhotoMutation.mutate(id)} 
               refetch={refetchPhotos}
             />
-            {/* 2. Теперь передаем существующую функцию refetchStats */}
             <MeasurementsPanel 
               stats={stats} 
               refetch={refetchStats} 

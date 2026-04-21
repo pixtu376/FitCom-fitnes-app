@@ -1,3 +1,4 @@
+import React from "react";
 import Sidebar from "../../widgets/Sidebar/Sidebar";
 import Calendar from "../../widgets/Calendar/CalendarWidget";
 import NextWorkout from "../../widgets/NextWorkout/NextWorkout";
@@ -12,7 +13,6 @@ export default function Dashboard() {
     queryKey: ["userData"],
     queryFn: async () => {
       const response = await api.get("/user");
-      console.log("Данные из Laravel:", response.data);
       return response.data;
     },
   });
@@ -20,35 +20,49 @@ export default function Dashboard() {
   if (isLoading) return null;
 
   return (
-    <div className={styles.dashboard}>
+    <div className={styles.layout}>
       <Sidebar user={user} />
       
-      <main className={styles.dashboard}>
-        <div className={styles.leftCol}>
-          <div className={styles.card}>
-            <Calendar />
-          </div>
-          <div className={styles.card}>
-            <h3 className={styles.cardTitle}>Аналитика</h3>
-            <div className={styles.chartContainer}>
-              <WeightChart data={user?.stats} />
+      <main className={styles.main}>
+        <div className={styles.contentGrid}>
+          
+          <section className={styles.leftCol}>
+            <div className={styles.calendarCard}>
+              <Calendar plans={user?.training_plans} />
             </div>
-          </div>
-        </div>
+            
+            <div className={`${styles.card} ${styles.chartCard}`}>
+              <div className={styles.cardHeader}>
+                <h3 className={styles.cardTitle}>Аналитика веса</h3>
+                <span className={styles.cardSubtitle}>Последние 6 месяцев</span>
+              </div>
+              <div className={styles.chartContainer}>
+                <WeightChart data={user?.stats} />
+              </div>
+            </div>
+          </section>
 
-        <div className={styles.rightCol}>
-          <div className={styles.card}>
-            <h3 className={styles.cardTitle}>Ближайшая тренировка:</h3>
-            <div className={styles.listContainer}>
-              <NextWorkout plan={user?.training_plans?.[0]} />
+          <section className={styles.rightCol}>
+            <div className={`${styles.card} ${styles.workoutCard}`}>
+              <div className={styles.cardHeader}>
+                <h3 className={styles.cardTitle}>Ближайшая тренировка</h3>
+                <span className={styles.accentText}>
+                  {user?.next_workout_date || "Завтра"}
+                </span>
+              </div>
+              <div className={styles.listContainer}>
+                <NextWorkout plan={user?.training_plans?.[0]} />
+              </div>
             </div>
-          </div>
-          <div className={styles.card}>
-            <h3 className={styles.cardTitle}>Памятка питания</h3>
-            <div className={styles.chartContainer}>
-              <NutritionMemo data={user?.bju?.[0]} />
+
+            <div className={`${styles.card} ${styles.nutritionCard}`}>
+              <h3 className={styles.cardTitle}>Памятка питания</h3>
+              <div className={styles.nutritionContent}>
+                <NutritionMemo goals={user?.nutrition_goals} />
+              </div>
             </div>
-          </div>
+          </section>
+
         </div>
       </main>
     </div>

@@ -1,0 +1,142 @@
+.card {
+  background-color: #22252A;
+  border-radius: 20px;
+  padding: 24px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-sizing: border-box;
+}
+
+.label {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 400;
+  margin-bottom: 4px;
+}
+
+.mainTimer {
+  font-size: 72px;
+  font-weight: 600;
+  color: #fff;
+  text-align: center;
+  line-height: 1;
+  margin-bottom: 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+.paused {
+  color: #888;
+}
+
+.separator {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  margin: 0 -30px 16px -30px;
+}
+
+.restSection {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.progressCircle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 4px solid #48CB9F;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.progressCircle.active {
+  box-shadow: 0 0 15px rgba(72, 203, 159, 0.15);
+  animation: pulse 2.5s infinite;
+}
+
+.innerCircle {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.pauseIcon {
+  font-size: 18px;
+  letter-spacing: -2px;
+}
+
+.restInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.restLabel {
+  font-size: 13px;
+  color: #CBD5E1;
+}
+
+.restValue {
+  font-size: 32px;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.controls {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.resetBtn, .pauseBtn {
+  flex: 1;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #CBD5E1;
+}
+
+.resetBtn {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.resetBtn:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.1);
+  color: #EF4444;
+}
+
+.pauseBtn {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+.pauseBtn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+}
+
+.mainTimer.paused + hr + .restSection .progressCircle {
+  border-color: #EF4444;
+}
+
+button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}

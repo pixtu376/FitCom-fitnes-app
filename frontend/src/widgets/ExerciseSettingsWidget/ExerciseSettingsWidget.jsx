@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import styles from "../../pages/Trainings/Training.module.css";
 import api from "../../app/api";
-// Импортируем наш новый компонент иконок
 import Icon from "../Icons/Icons"; 
 
 export default function ExerciseSettingsWidget({ plan, activeDayId, setActiveDayId, refetchPlans }) {
@@ -14,7 +13,6 @@ export default function ExerciseSettingsWidget({ plan, activeDayId, setActiveDay
 
   const colors = ["#38A169", "#E53E3E", "#3182CE", "#D69E2E", "#805AD5", "#718096", "#FF8C00", "#008080"];
   
-  // Список имен иконок, которые прописаны в Icon.jsx
   const iconList = [
     "dumbbell", "boxing", "stretching", "biceps_stat", 
     "heart_biceps", "leaf_circle", "yoga", "run_shoe", "bodybuilder"
@@ -84,12 +82,10 @@ export default function ExerciseSettingsWidget({ plan, activeDayId, setActiveDay
         </div>
 
         <div style={{ display: 'flex', gap: '8px', position: 'relative' }}>
-          {/* Кнопка выбора цвета */}
           <button className={styles.btn} onClick={() => { setShowColorPicker(!showColorPicker); setShowIconPicker(false); }}>
             <div style={{ backgroundColor: activeDay?.color, width: 18, height: 18, borderRadius: '50%' }} />
           </button>
           
-          {/* Кнопка выбора иконки */}
           <button className={styles.btn} onClick={() => { setShowIconPicker(!showIconPicker); setShowColorPicker(false); }}>
             <Icon name={activeDay?.icon || 'dumbbell'} color={activeDay?.color || "#fff"} size={20} />
           </button>
@@ -115,7 +111,7 @@ export default function ExerciseSettingsWidget({ plan, activeDayId, setActiveDay
                   onClick={() => handleUpdateDay({ icon: i })} 
                   style={{ 
                     cursor: 'pointer', 
-                    width: '40px',   /* Фиксированный размер круга */
+                    width: '40px',
                     height: '40px', 
                     display: 'flex', 
                     justifyContent: 'center', 
@@ -123,14 +119,14 @@ export default function ExerciseSettingsWidget({ plan, activeDayId, setActiveDay
                     background: activeDay.icon === i ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.03)', 
                     borderRadius: '50%',
                     border: activeDay.icon === i ? `1.5px solid ${activeDay.color}` : '1.5px solid transparent',
-                    padding: '6px',  /* Чем больше padding, тем меньше кажется иконка */
+                    padding: '6px',
                     boxSizing: 'border-box'
                   }}
                 >
                   <Icon 
                     name={i} 
                     color={activeDay.icon === i ? activeDay.color : "#fff"} 
-                    size="100%" /* Иконка займет все место внутри padding */
+                    size="100%"
                   />
                 </div>
               ))}
@@ -139,7 +135,6 @@ export default function ExerciseSettingsWidget({ plan, activeDayId, setActiveDay
         </div>
       </div>
 
-      {/* ТАБЫ ДНЕЙ */}
       <div className={styles.tabs}>
         {sortedDays.map(day => (
           <button 

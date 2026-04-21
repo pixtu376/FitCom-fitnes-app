@@ -7,7 +7,6 @@ export default function AddStatModal({ isOpen, onClose, stats = [], onUpdate, on
   const [deleteMode, setDeleteMode] = useState(false);
   const [custom, setCustom] = useState({ active: false, name: '', unit: '' });
 
-  // Список категорий (оставь как был)
   const categories = [
     { title: "Основные параметры тела", items: ["Вес (кг)", "Бицепс Л (см)", "Бицепс П (см)", "ИМТ (Индекс массы тела)", "Рост (см)"] },
     { title: "Антропометрия (Дополнительно)", items: ["Обхват Груди", "Обхват Шеи", "Обхват голени", "Обхват Таза", "Обхват Талии"] },
@@ -27,23 +26,19 @@ export default function AddStatModal({ isOpen, onClose, stats = [], onUpdate, on
 
   const toggle = (val) => setSelected(p => p.includes(val) ? p.filter(i => i !== val) : [...p, val]);
 
-  // Функция "временного" добавления своего параметра в список
   const handleTempAddCustom = () => {
     if (custom.name.trim()) {
       const fullName = `${custom.name.trim()} (${custom.unit.trim() || '—'})`;
       
-      // Если такого параметра еще нет в выбранных — добавляем
       if (!selected.includes(fullName)) {
         setSelected([...selected, fullName]);
       }
       
-      // Сбрасываем поля ввода, но НЕ ЗАКРЫВАЕМ модалку и НЕ ВЫЗЫВАЕМ onUpdate
       setCustom({ active: false, name: '', unit: '' });
     }
   };
 
   const handleApply = () => {
-    // Теперь handleApply отправляет ВСЁ: и чекбоксы, и добавленные кастомные строки
     if (deleteMode) {
       onDelete(selected.map(s => s.split(' (')[0]));
     } else {
@@ -61,7 +56,6 @@ export default function AddStatModal({ isOpen, onClose, stats = [], onUpdate, on
         </div>
 
         <div className={styles.content}>
-          {/* Рендерим категории (чекбоксы) */}
           {categories.map(cat => {
             const items = deleteMode 
               ? cat.items.filter(i => stats.some(s => s.name_stat === i.split(' (')[0]))
@@ -85,7 +79,6 @@ export default function AddStatModal({ isOpen, onClose, stats = [], onUpdate, on
             );
           })}
 
-          {/* Секция выбранных кастомных параметров (визуальное подтверждение) */}
           {selected.filter(item => !categories.flatMap(c => c.items).includes(item)).length > 0 && (
             <div className={styles.section}>
               <h4 className={styles.sectionTitle}>Добавленные вручную</h4>
@@ -112,7 +105,6 @@ export default function AddStatModal({ isOpen, onClose, stats = [], onUpdate, on
                 <div className={styles.customRow}>
                   <input placeholder="Имя" value={custom.name} onChange={e => setCustom({...custom, name: e.target.value})} />
                   <input placeholder="Ед." value={custom.unit} onChange={e => setCustom({...custom, unit: e.target.value})} className={styles.unitInp} />
-                  {/* Теперь эта кнопка только подтверждает ввод для списка, но не сохраняет в БД */}
                   <button type="button" onClick={handleTempAddCustom}><FiCheck /></button>
                 </div>
               )
@@ -125,7 +117,6 @@ export default function AddStatModal({ isOpen, onClose, stats = [], onUpdate, on
 
         <div className={styles.footer}>
           <button className={styles.cancelBtn} onClick={onClose}>Отмена</button>
-          {/* ФИНАЛЬНАЯ КНОПКА: Применяет всё сразу */}
           <button className={`${styles.applyBtn} ${deleteMode ? styles.danger : ''}`} onClick={handleApply}>
             {deleteMode ? "Удалить выбранные" : "Применить"}
           </button>

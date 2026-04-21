@@ -5,10 +5,9 @@ import Tesseract from 'tesseract.js';
 
 export default function PlanManagerWidget({ refetchPlans, onOpenCreate }) {
     const fileInputRef = useRef(null);
-    const docInputRef = useRef(null); // Реф для загрузки файлов (документов)
+    const docInputRef = useRef(null);
     const [isParsing, setIsParsing] = useState(false);
 
-    // «Пиздец какой умный» парсер
     const parseRawText = (text) => {
     const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 1);
     const days = [];
@@ -32,14 +31,13 @@ export default function PlanManagerWidget({ refetchPlans, onOpenCreate }) {
                 color: '#38A169'
             };
         } else if (currentDay) {
-            // Регулярка теперь просто берет часть с цифрами как строку
             const exMatch = line.match(/(.*?)\s*(\d+\s*(?:[xх*]|по)\s*\d+.*)/i);
             
             if (exMatch) {
                 currentDay.exercises.push({
                     name_exercises: exMatch[1].replace(/^\d+[.\s]*/, '').trim() || "Упражнение",
-                    repeats: exMatch[2].trim(), // Сохраняем "12x3" как строку
-                    weight: 0 // Вес можно вытянуть отдельной логикой, если он есть в конце
+                    repeats: exMatch[2].trim(),
+                    weight: 0
                 });
             } else {
                 currentDay.exercises.push({ 
@@ -55,14 +53,12 @@ export default function PlanManagerWidget({ refetchPlans, onOpenCreate }) {
     return days;
 };
 
-    // Обработка фото через Tesseract
     const handlePhotoUpload = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
 
         setIsParsing(true);
         try {
-            // Распознаем текст с картинки (русский + английский)
             const { data: { text } } = await Tesseract.recognize(file, 'rus+eng');
             
             const parsedDays = parseRawText(text);
@@ -85,11 +81,10 @@ export default function PlanManagerWidget({ refetchPlans, onOpenCreate }) {
             alert("Ошибка при сканировании текста");
         } finally {
             setIsParsing(false);
-            e.target.value = null; // сброс инпута
+            e.target.value = null;
         }
     };
 
-    // Обработка файла (пока заглушка под будущий формат)
     const handleFileLoad = (e) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -101,13 +96,10 @@ export default function PlanManagerWidget({ refetchPlans, onOpenCreate }) {
         <div>
             <div className={styles.managementGrid}>
                 <div className={styles.btnGroup}>
-                    {/* Кнопка открытия твоей новой модалки */}
                     <button className={styles.btn} onClick={onOpenCreate}>
                         <img src="/icons/plus.svg" alt="" className={styles.iconSmall} />
                         Создать новый план
                     </button>
-
-                    {/* Кнопка загрузки файла (вместо второго скана) */}
                     <button className={styles.btn} onClick={() => docInputRef.current.click()}>
                         <img src="/icons/download.svg" alt="" className={styles.iconSmall} />
                         Загрузить файл
@@ -121,7 +113,6 @@ export default function PlanManagerWidget({ refetchPlans, onOpenCreate }) {
                     />
                 </div>
 
-                {/* Кнопка сканирования фото (Tesseract) */}
                 <div className={styles.photoUpload} onClick={() => fileInputRef.current.click()}>
                     <img src="/icons/camera.svg" alt="camera" />
                     <span>{isParsing ? "Парсинг..." : "Из фото"}</span>

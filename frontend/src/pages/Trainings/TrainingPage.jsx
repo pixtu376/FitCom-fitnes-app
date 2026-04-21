@@ -13,7 +13,6 @@ import CreatePlanModal from "../../widgets/CreatePlanModal/CreatePlanModal";
 export default function TrainingPage() {
   const [activeDayId, setActiveDayId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // НОВОЕ: состояние для выбранного вручную плана
   const [selectedPlanId, setSelectedPlanId] = useState(null);
 
   const { data: plans, isLoading, refetch } = useQuery({
@@ -24,28 +23,21 @@ export default function TrainingPage() {
     }
   });
 
-  // ОПРЕДЕЛЯЕМ ТЕКУЩИЙ ПЛАН
-  // 1. Сначала ищем тот, который выбрали кликом (selectedPlanId)
-  // 2. Если ничего не выбрали, ищем активный из БД (is_active)
-  // 3. Если и того нет, берем первый из списка
   const currentPlan = plans?.find(p => p.plan_id === selectedPlanId) 
                    || plans?.find(p => p.is_active) 
                    || plans?.[0];
 
 useEffect(() => {
   if (currentPlan?.training_days?.length > 0) {
-    // 1. Получаем текущий день недели (напр. 'Пн')
     const todayName = new Intl.DateTimeFormat('ru-RU', { weekday: 'short' })
       .format(new Date())
       .replace('.', '');
 
-    // 2. Ищем соответствующий день в плане с защитой от null
     const todayDay = currentPlan.training_days.find(d => 
-      d.week_day && // Проверка, что week_day существует
+      d.week_day &&
       d.week_day.toLowerCase() === todayName.toLowerCase()
     );
 
-    // 3. Если сегодня тренировки нет, берем ID самого первого дня в списке
     if (todayDay) {
       setActiveDayId(todayDay.training_day_id);
     } else {
@@ -67,16 +59,14 @@ useEffect(() => {
         try {
           await api.post(`/plans/${planId}/activate`);
           await refetch();
-          setSelectedPlanId(planId); // Устанавливаем его как выбранный
+          setSelectedPlanId(planId);
           return;
         } catch (err) { console.error(err); }
       }
     }
 
-    // Если план просто актуальный (не просрочен), но мы на него кликнули
-    // Сделаем его активным в БД, чтобы при перезагрузке он остался выбранным
     try {
-        await api.post(`/plans/${planId}/activate`); // Метод активации ставит is_active = true
+        await api.post(`/plans/${planId}/activate`);
         setSelectedPlanId(planId);
         await refetch();
     } catch (err) { console.error(err); }
@@ -88,7 +78,6 @@ useEffect(() => {
     <div className={styles.layout}>
       <Sidebar />
       <main className={styles.main}>
-        {/* Теперь WeeklyPlanWidget всегда будет показывать дни currentPlan */}
         <div className={styles.card}>
           <h3 className={styles.cardTitle}>Еженедельный план: {currentPlan?.name}</h3>
           <WeeklyPlanWidget days={currentPlan?.training_days || []} />

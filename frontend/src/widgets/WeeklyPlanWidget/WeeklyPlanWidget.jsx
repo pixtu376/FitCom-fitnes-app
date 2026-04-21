@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './WeeklyPlanWidget.module.css';
-import Icon from '../Icons/Icons'; // Путь до твоего компонента Icon
+import Icon from '../Icons/Icons';
 
 export default function WeeklyPlanWidget({ days = [] }) {
   const weekLayout = [
@@ -42,7 +42,6 @@ export default function WeeklyPlanWidget({ days = [] }) {
                 border: `1px solid ${displayColor}` 
               }}
             >
-              {/* ЗАМЕНА <img> на <Icon /> */}
               <Icon 
                 name={displayIcon} 
                 color={displayColor} 
