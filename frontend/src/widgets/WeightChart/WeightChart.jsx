@@ -29,9 +29,7 @@ export default function WeightChart({ data = [] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   if (categories.length === 0) {
-    return (
-      <div className={styles.empty}>Нет данных для анализа</div>
-    );
+    return <div className={styles.empty}>Нет данных для анализа</div>;
   }
 
   const handlePrev = () => setCurrentIndex(prev => (prev - 1 + categories.length) % categories.length);
@@ -51,51 +49,52 @@ export default function WeightChart({ data = [] }) {
       </div>
 
       <div className={styles.chartWrapper}>
-        <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={chartData} margin={{ top: 10, right: 0, left: -25, bottom: 0 }}>
-            <defs>
-              <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#48CB9F" stopOpacity={0.3}/>
-                <stop offset="95%" stopColor="#48CB9F" stopOpacity={0}/>
-              </linearGradient>
-            </defs>
-            <CartesianGrid strokeDasharray="0" stroke="rgba(255,255,255,0.05)" vertical={false} />
-            <XAxis 
-              dataKey="date" 
-              stroke="#64748b" 
-              fontSize={12} 
-              tickLine={false} 
-              axisLine={false} 
-              dy={10}
-            />
-            <YAxis 
-              stroke="#64748b" 
-              fontSize={12} 
-              tickLine={false} 
-              axisLine={false} 
-              domain={['dataMin - 2', 'dataMax + 2']} 
-            />
-            <Tooltip 
-              contentStyle={{ 
-                backgroundColor: '#1A1D21', 
-                border: '1px solid rgba(255,255,255,0.1)', 
-                borderRadius: '12px',
-                fontSize: '14px'
-              }}
-              itemStyle={{ color: '#48CB9F' }}
-              cursor={{ stroke: 'rgba(72, 203, 159, 0.2)', strokeWidth: 2 }}
-            />
-            <Area 
-              type="monotone" 
-              dataKey="value" 
-              stroke="#48CB9F" 
-              fill="url(#colorValue)" 
-              strokeWidth={3} 
-              dot={{ r: 4, fill: '#48CB9F', strokeWidth: 2, stroke: '#22252A' }}
-              activeDot={{ r: 6, strokeWidth: 0 }}
-            />
-          </AreaChart>
-        </ResponsiveContainer>
+        <div className={styles.chartInner}>
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+              <defs>
+                <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#48CB9F" stopOpacity={0.3}/>
+                  <stop offset="95%" stopColor="#48CB9F" stopOpacity={0}/>
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="0" stroke="rgba(255,255,255,0.05)" vertical={false} />
+              <XAxis 
+                dataKey="date" 
+                stroke="#64748b" 
+                fontSize={12} 
+                tickLine={false} 
+                axisLine={false} 
+                dy={10}
+              />
+              <YAxis 
+                stroke="#64748b" 
+                fontSize={12} 
+                tickLine={false} 
+                axisLine={false} 
+                domain={['dataMin - 2', 'dataMax + 2']} 
+              />
+              <Tooltip 
+                contentStyle={{ 
+                  backgroundColor: '#1A1D21', 
+                  border: '1px solid rgba(255,255,255,0.1)', 
+                  borderRadius: '12px',
+                  fontSize: '14px'
+                }}
+                itemStyle={{ color: '#48CB9F' }}
+              />
+              <Area 
+                type="monotone" 
+                dataKey="value" 
+                stroke="#48CB9F" 
+                fill="url(#colorValue)" 
+                strokeWidth={3} 
+                dot={{ r: 4, fill: '#48CB9F', strokeWidth: 2, stroke: '#22252A' }}
+                activeDot={{ r: 6, strokeWidth: 0 }}
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
       </div>
     </div>
   );

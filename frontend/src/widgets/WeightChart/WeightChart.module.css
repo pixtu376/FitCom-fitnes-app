@@ -24,7 +24,7 @@
   flex: 1;
   width: 100%;
   position: relative;
-  min-height: 0;
+  min-height: 200px;
 }
 
 .chartInner {
@@ -33,15 +33,6 @@
   left: 0;
   right: 0;
   bottom: 0;
-}
-
-.empty {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  color: #64748b;
-  font-size: 14px;
 }
 
 .arrow {
@@ -67,12 +58,31 @@
   color: #48CB9F;
 }
 
-.arrow:active {
-  transform: scale(0.95);
+@media (max-width: 1200px) {
+  .chartWrapper {
+    min-height: 140px;
+  }
+  
+  .header {
+    margin-bottom: 12px;
+  }
+
+  .title {
+    font-size: 14px;
+  }
+
+  .arrow {
+    width: 28px;
+    height: 28px;
+    font-size: 16px;
+  }
 }
 
-.arrow:disabled {
-  opacity: 0.2;
-  cursor: not-allowed;
-  background: transparent;
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #64748b;
+  font-size: 14px;
 }

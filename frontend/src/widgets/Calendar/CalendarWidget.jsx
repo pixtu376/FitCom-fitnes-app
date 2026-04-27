@@ -1,26 +1,34 @@
-import React, { useState } from "react";
+import React from "react";
 import styles from "./Calendar.module.css";
 
-export default function Calendar({ plans = [] }) {
-  const [currentDate, setCurrentDate] = useState(new Date());
+export default function Calendar({ plans = [], isMobile = false }) {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-
-  const activePlan = plans?.find(p => String(p.is_active) === "1") || plans?.[0];
-
-  const changeMonth = (offset) => {
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + offset, 1));
-  };
+  
+  const weekLabels = ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС'];
 
   const generateDays = () => {
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
+    const year = today.getFullYear();
+    const month = today.getMonth();
+    
+    if (isMobile) {
+      const dayOfWeek = today.getDay() === 0 ? 6 : today.getDay() - 1; // ПН = 0
+      const startOfWeek = new Date(today);
+      startOfWeek.setDate(today.getDate() - dayOfWeek);
+      
+      return [...Array(7)].map((_, i) => {
+        const d = new Date(startOfWeek);
+        d.setDate(startOfWeek.getDate() + i);
+        return { d: d.getDate(), fullDate: d, current: true };
+      });
+    }
+
     const firstDay = new Date(year, month, 1).getDay();
     const startOffset = firstDay === 0 ? 6 : firstDay - 1;
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const daysInPrevMonth = new Date(year, month, 0).getDate();
 
-    const calendarDays = [];
+    let calendarDays = [];
     for (let i = startOffset; i > 0; i--) {
       calendarDays.push({ d: daysInPrevMonth - i + 1, current: false, offset: -1 });
     }
@@ -31,58 +39,56 @@ export default function Calendar({ plans = [] }) {
     for (let i = 1; i <= remaining; i++) {
       calendarDays.push({ d: i, current: false, offset: 1 });
     }
-    return calendarDays;
+    return calendarDays.map(day => ({
+      ...day,
+      fullDate: new Date(year, month + (day.offset || 0), day.d)
+    }));
   };
 
-  const checkWorkout = (dayNumber, monthOffset) => {
-    if (!activePlan?.training_days) return null;
-    const date = new Date(currentDate.getFullYear(), currentDate.getMonth() + monthOffset, dayNumber);
-    date.setHours(0, 0, 0, 0);
-
-    const planStart = new Date(activePlan.start_date);
-    const planEnd = new Date(activePlan.end_date);
-    if (date < planStart || date > planEnd) return null;
-
+  const checkWorkout = (date) => {
+    const activePlan = plans?.find(p => String(p.is_active) === "1") || plans?.[0];
+    if (!activePlan?.training_days) return false;
     const dbDaysMap = { 1: "Пн", 2: "Вт", 3: "Ср", 4: "Чт", 5: "Пт", 6: "Сб", 0: "Вс" };
-    const currentDayLabel = dbDaysMap[date.getDay()];
-    return activePlan.training_days.find(td => td.week_day?.trim() === currentDayLabel);
+    return activePlan.training_days.some(td => td.week_day?.trim() === dbDaysMap[date.getDay()]);
   };
+
+  const days = generateDays();
 
   return (
-    <div className={styles.calendarContainer}>
-      <div className={styles.header}>
-        <button onClick={() => changeMonth(-1)} className={styles.arrow}>&lt;</button>
-        <span className={styles.monthTitle}>
-          {currentDate.toLocaleString('ru-RU', { month: 'long' })}
-        </span>
-        <button onClick={() => changeMonth(1)} className={styles.arrow}>&gt;</button>
-      </div>
+    <div className={`${styles.calendarContainer} ${isMobile ? styles.mobileMode : ""}`}>
+      {!isMobile && (
+        <div className={styles.monthTitle}>
+          {today.toLocaleString('ru-RU', { month: 'long' })}
+        </div>
+      )}
 
-      <div className={styles.weekDays}>
-        {['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС'].map(d => (
-          <div key={d} className={styles.weekDayLabel}>{d}</div>
-        ))}
-      </div>
+      {!isMobile && (
+        <div className={styles.weekDays}>
+          {weekLabels.map(d => <div key={d} className={styles.weekLabel}>{d}</div>)}
+        </div>
+      )}
 
-      <div className={styles.grid}>
-        {generateDays().map((day, i) => {
-          const workout = checkWorkout(day.d, day.offset);
-          const cellDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + day.offset, day.d);
-          cellDate.setHours(0, 0, 0, 0);
+      <div className={isMobile ? styles.mobileGrid : styles.grid}>
+        {days.map((day, i) => {
+          const workout = checkWorkout(day.fullDate);
+          const isToday = day.fullDate.getTime() === today.getTime();
+          const dayIdx = day.fullDate.getDay() === 0 ? 6 : day.fullDate.getDay() - 1;
 
-          const isToday = cellDate.getTime() === today.getTime();
-          
           return (
-            <div 
-              key={i} 
-              className={`
+            <div key={i} className={styles.dayWrapper}>
+              {isMobile && (
+                <span className={`${styles.mobileWeekLabel} ${isToday ? styles.activeText : ""}`}>
+                  {weekLabels[dayIdx]}
+                </span>
+              )}
+              <div className={`
                 ${styles.dayCell} 
                 ${!day.current ? styles.notCurrent : ''} 
                 ${isToday ? styles.today : ''} 
                 ${workout ? styles.hasWorkout : ''}
-              `}
-            >
-              <span className={styles.dayNumber}>{day.d}</span>
+              `}>
+                {day.d}
+              </div>
             </div>
           );
         })}

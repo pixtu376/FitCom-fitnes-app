@@ -4,6 +4,14 @@
   justify-content: space-between;
   gap: 24px;
   padding: 8px 0;
+  width: 100%;
+  height: 100%;
+}
+
+.mobileLayout {
+  flex-direction: column !important;
+  justify-content: center;
+  gap: 10px;
 }
 
 .stats {
@@ -52,13 +60,13 @@
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  min-width: 120px;
+  min-width: 100px;
 }
 
 .pieWrapper {
   position: relative;
-  width: 100px;
-  height: 100px;
+  width: 90px;
+  height: 90px;
 }
 
 .pieLabel {
@@ -66,7 +74,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   color: #64748b;
   text-transform: uppercase;
@@ -83,7 +91,7 @@
   align-items: center;
   gap: 6px;
   font-size: 11px;
-  color: #64748b;
+  color: #888;
 }
 
 .dot {
@@ -92,16 +100,14 @@
   border-radius: 50%;
 }
 
-@media (max-width: 480px) {
-  .container {
-    flex-direction: column-reverse;
-    align-items: stretch;
+@media (max-width: 1200px) {
+  .chartSide {
+    min-width: unset;
+    width: 100%;
   }
   
-  .chartSide {
-    flex-direction: row;
-    justify-content: space-around;
-    padding-bottom: 16px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  .pieWrapper {
+    width: 80px;
+    height: 80px;
   }
 }

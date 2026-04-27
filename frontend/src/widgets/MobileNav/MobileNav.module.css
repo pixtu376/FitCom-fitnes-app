@@ -1,0 +1,70 @@
+.mobileNav {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: #2C3035;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 10px;
+    z-index: 1000;
+}
+
+.item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    color: #888;
+    font-size: 12px;
+    transition: 0.2s;
+}
+
+.active {
+    color: #fff;
+}
+
+.iconContainer img {
+    width: 24px;
+    height: 24px;
+    opacity: 0.6;
+}
+
+.active .iconContainer img {
+    opacity: 1;
+    filter: invert(72%) sepia(45%) saturate(467%) hue-rotate(110deg) brightness(95%) contrast(85%);
+}
+
+.iconGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3px;
+}
+
+.iconGrid span {
+    width: 8px;
+    height: 8px;
+    background: #888;
+    border-radius: 1px;
+}
+
+.active .iconGrid span {
+    background: #48CB9F;
+}
+
+@media (min-width: 1201px) {
+    .mobileNav {
+        display: none !important;
+    }
+}
+
+@media (max-width: 1200px) {
+    .mobileNav {
+        display: flex;
+    }
+}
