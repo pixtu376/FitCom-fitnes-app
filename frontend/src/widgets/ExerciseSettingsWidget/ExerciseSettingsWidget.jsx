@@ -73,8 +73,26 @@ export default function ExerciseSettingsWidget({ plan, activeDayId, setActiveDay
     } catch (e) { console.error(e); }
   };
 
+const handleAddExercise = async () => {
+    const trimmedName = newExercise.trim();
+    if (!trimmedName) return;
+
+    try {
+        await api.post(`/exercises/${activeDay.training_day_id}/add`, { 
+            name: trimmedName,
+            repeats: "0",
+            weight: 0
+        });
+        setNewExercise("");
+        refetchPlans();
+    } catch (e) {
+        console.error("Ошибка при добавлении:", e);
+        alert("Ошибка при добавлении. Проверьте логи сервера.");
+    }
+};
+
   return (
-    <div className={styles.card}>
+    <div className={`${styles.card} ${styles.exercisesCard}`}>
       <div className={styles.settingsHeader}>
         <div>
           <h2 className={styles.cardTitle} style={{ marginBottom: '4px' }}>Настройка упражнений</h2>
@@ -224,34 +242,35 @@ export default function ExerciseSettingsWidget({ plan, activeDayId, setActiveDay
             </span>
           </div>
 
-          <div className={styles.exerciseList}>
-            {activeDay.workout_exercises?.map((we, index) => (
-              <div key={we.workout_exercise_id} className={styles.exerciseRow}>
-                <span style={{ color: '#E2E8F0' }}>{index + 1}. {we.exercise.name_exercise}</span>
-                <div className={styles.editBadge}>{we.repeats}x</div>
-                <div className={styles.editBadge}>{we.weight}кг</div>
-                <button 
-                  onClick={() => { if(window.confirm("Удалить?")) api.delete(`/exercises/${we.workout_exercise_id}`).then(refetchPlans); }}
-                  style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4 }}
-                >
-                  <Icon name="minus_circle" color="#E53E3E" size={18} />
-                </button>
-              </div>
-            ))}
-
-            <div style={{ display: 'flex', gap: '12px', marginTop: '12px' }}>
-              <input 
-                type="text" 
-                placeholder="Новое упражнение" 
-                className={styles.newExerciseInput}
-                value={newExercise}
-                onChange={(e) => setNewExercise(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && api.post(`/exercises/${activeDay.training_day_id}/add`, { name: newExercise }).then(() => {setNewExercise(""); refetchPlans();})}
-              />
-              <button className={styles.btn} onClick={() => api.post(`/exercises/${activeDay.training_day_id}/add`, { name: newExercise }).then(() => {setNewExercise(""); refetchPlans();})}>
-                 +
-              </button>
+          <div className={styles.exercisesScrollArea}>
+            <div className={styles.exerciseList}>
+              {activeDay.workout_exercises?.map((we, index) => (
+                <div key={we.workout_exercise_id} className={styles.exerciseRow}>
+                  <span style={{ color: '#E2E8F0' }}>{index + 1}. {we.exercise.name_exercise}</span>
+                  <div className={styles.editBadge}>{we.repeats}x</div>
+                  <div className={styles.editBadge}>{we.weight}кг</div>
+                  <button 
+                    onClick={() => { if(window.confirm("Удалить?")) api.delete(`/exercises/${we.workout_exercise_id}`).then(refetchPlans); }}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4 }}
+                  >
+                    <Icon name="minus_circle" color="#E53E3E" size={18} />
+                  </button>
+                </div>
+              ))}
             </div>
+          </div>
+
+          <div className={styles.footer} style={{ display: 'flex', gap: '8px', marginTop: '12px', flexShrink: 0 }}>
+            <input 
+              type="text" 
+              placeholder="Новое упражнение" 
+              className={styles.newExerciseInput}
+              value={newExercise}
+              onChange={(e) => setNewExercise(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleAddExercise()}
+              style={{ flex: 1, minWidth: 0 }}
+            />
+            <button className={styles.btn} onClick={handleAddExercise} style={{ padding: '0 16px' }}>+</button>
           </div>
         </>
       )}

@@ -1,56 +1,62 @@
 .weekGrid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 12px;
+  gap: 10px;
   width: 100%;
 }
 
 .dayCard {
   background: #1a1d21;
   border-radius: 12px;
-  padding: 15px 10px;
+  padding: 12px 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: relative;
-  transition: transform 0.2s;
+  min-width: 0;
 }
 
 .iconCircle {
-  width: 44px;
-  height: 44px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1.5px solid #e2e8f0; 
-  padding: 8px;
-  margin: 10px auto;
-  transition: all 0.2s ease-in-out;
-  box-sizing: border-box;
-}
-
-.iconCircle img,
-.iconCircle svg {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
+  margin: 8px 0;
 }
 
 .statusText {
-  font-size: 11px;
-  font-weight: 500;
-  text-align: center;
+  font-size: 10px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   width: 100%;
+  text-align: center;
 }
 
-.indicator {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  margin-top: 8px;
+@media (max-width: 768px) {
+    .weekGrid {
+        gap: 6px;
+    }
+}
+
+@media (max-width: 550px) {
+    .weekGrid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .dayCard {
+        width: calc(25% - 8px); 
+        flex-shrink: 0;
+        padding: 10px 4px;
+    }
+}
+
+@media (max-width: 380px) {
+    .dayCard {
+        width: calc(33.33% - 8px);
+    }
 }

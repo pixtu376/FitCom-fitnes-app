@@ -152,13 +152,13 @@ class TrainingController extends Controller
         }
 
         $exerciseRef = Exercise::firstOrCreate(
-            ['name_exercises' => $request->input('name')]
+            ['name_exercise' => $request->input('name')]
         );
 
         $newExerciseWorkout = Workout_exercise::create([
             'training_day_id' => $day_id,
             'exercise_id' => $exerciseRef->exercise_id,
-            'repeats' => $request->input('repeats', 0),
+            'repeats' => $request->input('repeats', '0'),
             'weight' => $request->input('weight', 0)
         ]);
 
