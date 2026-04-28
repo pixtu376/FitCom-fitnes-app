@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './WorkoutTimer.module.css';
 
-export default function WorkoutTimer({ isStarted, isPaused, isFinished, restTrigger, onPauseToggle, onReset }) {
+export default function WorkoutTimer({ isStarted, isPaused, isFinished, restTrigger, onPauseToggle, onReset, isMobile }) {
   const [totalSeconds, setTotalSeconds] = useState(0);
   const [restSeconds, setRestSeconds] = useState(0);
 
@@ -38,10 +38,6 @@ export default function WorkoutTimer({ isStarted, isPaused, isFinished, restTrig
     return () => clearInterval(interval);
   }, [restSeconds, isPaused]);
 
-  const handleSkipRest = () => {
-    setRestSeconds(0);
-  };
-
   const formatTime = (s) => {
     const m = Math.floor(s / 60);
     const secs = s % 60;
@@ -49,14 +45,14 @@ export default function WorkoutTimer({ isStarted, isPaused, isFinished, restTrig
   };
 
   return (
-    <div className={styles.card}>
-      <span className={styles.label}>ТАЙМЕР ТРЕНИРОВКИ</span>
+    <div className={`${styles.card} ${isMobile ? styles.mobileMode : ''}`}>
+      {!isMobile && <span className={styles.label}>ТАЙМЕР ТРЕНИРОВКИ</span>}
       
       <div className={`${styles.mainTimer} ${isPaused ? styles.paused : ''}`}>
         {formatTime(totalSeconds)}
       </div>
 
-      <hr className={styles.separator} />
+      {!isMobile && <hr className={styles.separator} />}
 
       <div className={styles.restSection}>
         <div className={`${styles.progressCircle} ${restSeconds > 0 ? styles.active : ''}`}>
@@ -66,21 +62,21 @@ export default function WorkoutTimer({ isStarted, isPaused, isFinished, restTrig
         </div>
         
         <div className={styles.restInfo}>
-          <span className={styles.restLabel}>Время Отдыха</span>
+          {!isMobile && <span className={styles.restLabel}>Время Отдыха</span>}
           <span className={styles.restValue}>{formatTime(restSeconds)}</span>
         </div>
       </div>
 
       <div className={styles.controls}>
         <button className={styles.resetBtn} onClick={onReset} disabled={!isStarted}>
-          Сброс
+          {isMobile ? '↺' : 'Сброс'}
         </button>
         <button 
           className={styles.pauseBtn} 
           onClick={onPauseToggle} 
           disabled={!isStarted || isFinished}
         >
-          {isPaused ? 'Продолжить' : 'Пауза'}
+          {isMobile ? (isPaused ? '▶' : '||') : (isPaused ? 'Продолжить' : 'Пауза')}
         </button>
       </div>
     </div>

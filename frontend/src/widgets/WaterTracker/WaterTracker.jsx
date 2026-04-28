@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import styles from './WaterTracker.module.css';
 
-export default function WaterTracker({ isStarted, restTrigger, resetTrigger }) {
+export default function WaterTracker({ isStarted, restTrigger, resetTrigger, isMobile }) {
   const [percent, setPercent] = useState(40);
 
   useEffect(() => {
-    setPercent(40);
+    setPercent(100);
   }, [resetTrigger]);
 
   useEffect(() => {
@@ -19,8 +19,8 @@ export default function WaterTracker({ isStarted, restTrigger, resetTrigger }) {
   };
 
   return (
-    <div className={styles.card}>
-      <span className={styles.label}>Контроль воды</span>
+    <div className={`${styles.card} ${isMobile ? styles.mobileMode : ''}`}>
+      {!isMobile && <span className={styles.label}>Контроль воды</span>}
       
       <div className={styles.content}>
         <div className={styles.bottleContainer}>
@@ -38,21 +38,19 @@ export default function WaterTracker({ isStarted, restTrigger, resetTrigger }) {
 
         <div className={styles.info}>
           <div className={styles.percentText}>{percent}%</div>
-          <p className={styles.hint}>Самое время сделать несколько глотков</p>
+          {!isMobile && <p className={styles.hint}>Самое время сделать несколько глотков</p>}
           
           <div className={styles.progressTrack}>
             <div 
               className={styles.progressBar} 
-              style={{ 
-                width: `${percent}%`,
-              }} 
+              style={{ width: `${percent}%` }} 
             />
           </div>
 
           <div className={styles.controls}>
-            <button onClick={() => handleAddWater(10)}>+ 100 мл</button>
-            <button onClick={() => handleAddWater(25)}>+ 250 мл</button>
-            <button onClick={() => handleAddWater(50)}>+ 500 мл</button>
+            <button onClick={() => handleAddWater(10)}>+ 100</button>
+            <button onClick={() => handleAddWater(25)}>+ 250</button>
+            <button onClick={() => handleAddWater(50)}>+ 500</button>
           </div>
         </div>
       </div>

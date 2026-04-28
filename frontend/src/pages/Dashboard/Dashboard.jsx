@@ -3,7 +3,7 @@ import Sidebar from "../../widgets/Sidebar/Sidebar";
 import Calendar from "../../widgets/Calendar/CalendarWidget";
 import NextWorkout from "../../widgets/NextWorkout/NextWorkout";
 import WeightChart from "../../widgets/WeightChart/WeightChart";
-import NutritionMemo from "../../widgets/Nutrition/NutritionMemo";
+import NutritionMemo from "../../widgets/Nutrition/StatMemo";
 import MobileNav from "../../widgets/MobileNav/MobileNav";
 import MobileHeader from "../../widgets/MobileHeader/MobileHeader"; 
 import styles from "./Dashboard.module.css";
@@ -84,7 +84,7 @@ export default function Dashboard() {
           <div className={`${styles.card} ${styles.nutritionCard}`}>
             <h3 className={styles.cardTitle}>График целей</h3>
             <div className={styles.nutritionWrapper}>
-              <NutritionMemo data={user?.nutrition_goals} isMobile={isMobile} />
+              <NutritionMemo isMobile={isMobile} />
             </div>
           </div>
         </div>

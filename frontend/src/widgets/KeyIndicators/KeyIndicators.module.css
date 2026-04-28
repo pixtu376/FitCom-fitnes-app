@@ -1,17 +1,15 @@
 .card {
   background-color: #22252A;
   border-radius: 16px;
-  padding: 24px;
   display: flex;
   flex-direction: column;
   flex: 1;
-  min-height: 0; 
-  gap: 20px;
+  min-height: 0;
   box-sizing: border-box;
 }
 
 .cardTitle {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 500;
   color: #E2E8F0;
   margin: 0;
@@ -20,10 +18,10 @@
 .indicatorsList {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
   flex: 1;
   overflow-y: auto;
-  padding-right: 12px;
+  padding-right: 10px;
   min-height: 0; 
 }
 

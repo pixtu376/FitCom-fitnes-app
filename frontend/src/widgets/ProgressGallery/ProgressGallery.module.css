@@ -1,16 +1,16 @@
 .card {
   background-color: #22252A;
   border-radius: 16px;
-  padding: 24px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
 }
 
 .cardTitle {
-  font-size: 20px;
+  font-size: 18px;         /* чуть уменьшил */
   font-weight: 500;
-  margin-bottom: 20px;
+  margin-bottom: 16px;     /* было 20px */
   color: #E2E8F0;
 }
 
@@ -56,7 +56,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 16px;
+  padding: 12px;
   opacity: 0;
   transition: opacity 0.3s ease;
 }

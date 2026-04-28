@@ -1,20 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import api from '../../app/api';
 import styles from './ActiveSession.module.css';
 
 export default function ActiveSession({ onStart, onStepComplete, onFinish }) {
-  const [sessionState, setSessionState] = useState('loading'); // loading, selection, ready, active, finished
+  const [sessionState, setSessionState] = useState('loading');
   const [trainingMode, setTrainingMode] = useState('planned'); 
-  
   const [plan, setPlan] = useState(null);
   const [activeDay, setActiveDay] = useState(null);
-  
   const [exerciseLogs, setExerciseLogs] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  // Реф для хранения ссылок на карточки упражнений
+  const itemRefs = useRef([]);
 
   useEffect(() => {
     fetchActivePlan();
   }, []);
+
+  // Автоскролл при изменении текущего упражнения
+  useEffect(() => {
+    if (sessionState === 'active' && itemRefs.current[currentIndex]) {
+      itemRefs.current[currentIndex].scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      });
+    }
+  }, [currentIndex, sessionState]);
 
   const fetchActivePlan = async () => {
     try {
@@ -27,16 +38,16 @@ export default function ActiveSession({ onStart, onStepComplete, onFinish }) {
         const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         const todayName = daysOfWeek[new Date().getDay()];
         const todayPlan = activePlan.training_days.find(d => d.week_day === todayName);
-        
+
         if (todayPlan) {
           setActiveDay(todayPlan);
           setTrainingMode('planned');
           initLogs(todayPlan);
-          setSessionState('ready'); 
+          setSessionState('ready');
         } else {
           setActiveDay(activePlan.training_days[0]);
           initLogs(activePlan.training_days[0]);
-          setSessionState('selection'); 
+          setSessionState('selection');
         }
       } else {
         setSessionState('error');
@@ -56,6 +67,8 @@ export default function ActiveSession({ onStart, onStepComplete, onFinish }) {
         weight: ex.weight
       }));
       setExerciseLogs(initialLogs);
+      // Сбрасываем массив рефов под новое количество упражнений
+      itemRefs.current = new Array(initialLogs.length).fill(null);
     }
   };
 
@@ -162,7 +175,15 @@ export default function ActiveSession({ onStart, onStepComplete, onFinish }) {
 
       <div className={styles.list}>
         {exerciseLogs.map((ex, idx) => (
-          <div key={ex.id} className={`${styles.item} ${idx === currentIndex && sessionState !== 'finished' ? styles.activeItem : ''} ${ex.status !== 'pending' ? styles.doneItem : ''}`}>
+          <div 
+            key={ex.id} 
+            ref={el => itemRefs.current[idx] = el}
+            className={`
+              ${styles.item} 
+              ${idx === currentIndex && sessionState !== 'finished' ? styles.activeItem : ''} 
+              ${ex.status !== 'pending' ? styles.doneItem : ''}
+            `}
+          >
             <div className={styles.exInfo}>
               <span className={styles.exName}>{idx + 1}) {ex.name}</span>
             </div>
