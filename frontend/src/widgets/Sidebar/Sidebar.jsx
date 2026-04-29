@@ -27,10 +27,10 @@ export default function Sidebar() {
         </NavLink>
       </nav>
       <div className={styles.bottom}>
-        <div className={styles.user}>
+        <NavLink to="/Profile" className={({ isActive }) => isActive ? `${styles.link} ${styles.active}` : styles.link}>
           <img src="../public/icons/user.svg" className={styles.icon} alt="" />
           Логин/Имя
-        </div>
+        </NavLink>
         <div className={styles.link}>
           <img src="../public/icons/settings.svg" className={styles.icon} alt="" />
           Настройки

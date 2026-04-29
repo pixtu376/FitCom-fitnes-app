@@ -1,0 +1,330 @@
+/* Базовый слой и обертка */
+.container {
+  display: flex;
+  background-color: #1A1D21;
+  height: 100vh; /* Строго 100vh чтобы сайдбар не ломался */
+  overflow: hidden;
+  color: #fff;
+}
+
+.mainContent {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto; /* Скроллится только контент, не ломая интерфейс */
+  display: flex;
+  flex-direction: column;
+}
+
+.headerArea {
+  margin-bottom: 24px;
+}
+
+.pageTitle {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+  color: #fff;
+}
+
+/* Гибкая сетка карточек */
+.grid {
+  display: grid;
+  /* Автоматически расставляет колонки. Если экран меньше 400px - схлопнется в 1 колонку */
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 24px;
+  align-items: start; /* Карточки не тянутся в высоту за соседями */
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+
+.card {
+  background: #22252A;
+  border-radius: 20px;
+  padding: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box; /* Защита от вылезания за края */
+}
+
+.cardTitle {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 20px 0;
+  color: #fff;
+}
+
+/* Элементы форм (универсальные) */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+.field label, .labelSmall {
+  font-size: 13px;
+  color: #888;
+}
+
+.input, .select, .textarea {
+  width: 100%;
+  box-sizing: border-box;
+  background: #1A1D21;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 14px 16px;
+  color: #fff;
+  font-size: 14px;
+  outline: none;
+  transition: 0.2s;
+}
+
+.input:focus, .select:focus, .textarea:focus {
+  border-color: #48CB9F;
+}
+
+.textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+/* Ряды инпутов (для десктопа рядом, для телефона друг под другом) */
+.formRow, .passRow {
+  display: flex;
+  flex-direction: column; /* По умолчанию друг под другом (мобилка) */
+  gap: 16px;
+}
+
+@media (min-width: 500px) {
+  .formRow, .passRow {
+    flex-direction: row; /* На средних/больших экранах рядом */
+  }
+  .formRow > *, .passRow > * {
+    flex: 1;
+    margin-bottom: 0;
+  }
+}
+
+/* Профиль Хедер (Аватар + Логин) */
+.profileHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.avatarWrapper {
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #48CB9F;
+  background: #1A1D21;
+}
+
+.editAvatarBtn {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  background: #48CB9F;
+  color: #1A1D21;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.loginBlock {
+  text-align: right;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 10px 14px;
+  border-radius: 12px;
+}
+
+.loginLabel {
+  font-size: 11px;
+  color: #888;
+  margin-bottom: 4px;
+}
+
+.loginValue {
+  font-size: 14px;
+  color: #48CB9F;
+  font-family: monospace;
+}
+
+/* Безопасность и Пароли */
+.relative {
+  position: relative;
+  display: flex;
+  width: 100%;
+}
+
+.relative .input {
+  padding-right: 44px; /* Чтобы текст не заходил на кнопку-глаз */
+}
+
+.eyeBtn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 4px;
+}
+
+.actionButtons {
+  display: flex;
+  flex-direction: column; /* По умолчанию друг под другом */
+  gap: 16px;
+  margin-top: 20px;
+  width: 100%;
+}
+
+@media (min-width: 500px) {
+  .actionButtons {
+    flex-direction: row; /* На десктопе рядом */
+  }
+}
+
+/* Кнопки */
+.btnPrimary {
+  width: 100%;
+  background: #48CB9F;
+  color: #1A1D21;
+  border: none;
+  padding: 14px 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s;
+  box-sizing: border-box;
+}
+
+.btnPrimary:hover {
+  background: #38A169;
+}
+
+.btnOutline {
+  flex: 1;
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 14px 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btnOutline:hover {
+  border-color: #48CB9F;
+  color: #48CB9F;
+}
+
+.btnDanger {
+  flex: 1;
+  background: rgba(239, 68, 68, 0.05);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  padding: 14px 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btnDanger:hover {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: #ef4444;
+}
+
+/* Ряды Целей (Flexbox для безопасности переполнения) */
+.targetSection {
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.targetRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.targetColSelect {
+  flex: 2; /* Занимает 2 части пространства */
+  min-width: 0; /* Важно: не дает select разорвать контейнер */
+}
+
+.targetColInput {
+  flex: 1; /* Занимает 1 часть */
+  min-width: 0;
+}
+
+.targetColToggle {
+  flex: 0 0 74px; /* Фиксированная ширина для кнопок стрелок */
+}
+
+.dirBox {
+  display: flex;
+  background: #1A1D21;
+  border-radius: 10px;
+  padding: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  gap: 2px;
+}
+
+.dirBtn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #555;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 6px;
+  padding: 6px 0;
+}
+
+.activeUp {
+  background: #48CB9F;
+  color: #1A1D21;
+}
+
+.activeDown {
+  background: #EF4444;
+  color: #fff;
+}
+
+/* Мобильный вид (дополнительные настройки для узких экранов) */
+@media (max-width: 1200px) {
+  .mainContent {
+    padding: 16px 16px 100px 16px; /* Отступ снизу для MobileNav */
+  }
+}

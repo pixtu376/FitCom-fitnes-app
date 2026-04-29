@@ -65,8 +65,7 @@ class AuthController extends Controller
     {
         return $request->user()->load([
             'training_plans.training_days.workout_exercises.exercise',
-            'stats',
-            'bju'
+            'stats'
         ]);
     }
 

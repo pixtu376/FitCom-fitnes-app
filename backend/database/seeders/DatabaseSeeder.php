@@ -28,16 +28,7 @@ class DatabaseSeeder extends Seeder
             'avatar_url' => 'default.png',
             'birth_day'  => '2000-01-01',
         ]);
-
-        // 2. БЖУ
-        DB::table('bju')->insert([
-            'user_id'       => $user->user_id,
-            'protein'       => 130,
-            'calories'      => 1850,
-            'fats'          => 100,
-            'carbohydrates' => 260,
-        ]);
-
+        
         // 3. Статистика (История для графиков)
         // Вес тела (несколько записей для динамики)
         $weights = [98.5, 96.2, 94.8, 93.5, 91.8];
