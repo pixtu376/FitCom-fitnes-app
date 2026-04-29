@@ -10,6 +10,9 @@
   --color-protein: #5383b1;
   --color-fat: #e5a55d;
   --color-carb: #71c391;
+  
+  --gap-main: 24px;
+  --radius-card: 20px;
 }
 
 * {
@@ -32,14 +35,120 @@ body {
   width: 100vw;
 }
 
-.app-container {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
-.dashboard-layout {
+.app-layout {
   display: flex;
   width: 100%;
+  height: 100vh;
+  background-color: #1A1D21;
+  overflow: hidden;
+  padding: var(--gap-main);
+  gap: var(--gap-main);
+}
+
+.app-main {
+  flex: 1;
+  min-width: 0;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: var(--gap-main);
+  height: 100%;
+  min-height: 0;
+  align-items: stretch;
+}
+
+.column-left, .column-right {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-main);
+  height: 100%;
+  min-height: 0;
+}
+
+.base-card {
+  background-color: var(--card-bg);
+  border-radius: var(--radius-card);
+  padding: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 500;
+  color: #fff;
+  margin: 0;
+}
+
+.scroll-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+  background: #2D3136;
+  border-radius: 10px;
+}
+
+.app-loader,
+.app-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+  color: var(--text-gray);
+  font-size: 16px;
+}
+
+.app-error {
+  flex-direction: column;
+  gap: 16px;
+  text-align: center;
+  padding: 24px;
+}
+
+.app-btn-retry {
+  padding: 10px 24px;
+  background: var(--accent-green);
+  color: var(--bg-dark);
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.app-btn-retry:hover {
+  opacity: 0.9;
+}
+
+.app-btn-retry:active {
+  transform: scale(0.98);
+}
+
+@media (max-width: 1200px) {
+  .app-layout {
+    display: block;
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+    padding: 0;
+  }
+  
+  .app-main {
+    padding: 16px 16px 100px 16px;
+    height: auto;
+  }
+
+  .content-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
 }

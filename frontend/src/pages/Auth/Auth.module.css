@@ -1,19 +1,20 @@
 .authPage {
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: var(--bg-dark);
+  padding: 20px;
 }
 
 .authCard {
   background-color: var(--card-bg);
-  padding: 40px;
-  border-radius: 24px;
+  padding: 32px;
+  border-radius: 20px;
   border: 1px solid var(--border-color);
   width: 100%;
-  max-width: 420px;
+  max-width: 400px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -22,79 +23,107 @@
 .logo {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   color: var(--accent-green);
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 700;
-  margin-bottom: 32px;
+  margin-bottom: 16px;
 }
 
-.logo img { width: 36px; }
+.logo img { width: 30px; }
 
 .title {
-  font-size: 22px;
-  margin-bottom: 24px;
+  font-size: 18px;
+  margin-bottom: 20px;
   font-weight: 500;
+  color: #fff;
 }
 
 .form {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 12px;
 }
 
 .field {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
 }
 
 .field label {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--text-gray);
 }
 
-.field input {
+.field input, .field select {
   background-color: #1c1f24;
   border: 1px solid var(--border-color);
-  border-radius: 12px;
-  padding: 14px;
+  border-radius: 10px;
+  padding: 10px 12px;
   color: white;
   outline: none;
+  font-size: 14px;
   transition: 0.2s;
 }
 
-.field input:focus {
+.field input:focus, .field select:focus {
   border-color: var(--accent-green);
+  background-color: #23272e;
 }
 
+.form .field:nth-child(3),
+.form .field:nth-child(4) {
+  width: 48%;
+  display: inline-flex;
+}
+
+.form {
+  display: block;
+}
+
+.form .field {
+  margin-bottom: 8px;
+}
+
+.form .field:nth-child(3) { margin-right: 4%; }
+
 .submitBtn {
+  width: 100%;
   background-color: var(--accent-green);
   color: var(--bg-dark);
   border: none;
-  border-radius: 12px;
-  padding: 16px;
+  border-radius: 10px;
+  padding: 14px;
   font-weight: 600;
-  font-size: 16px;
+  font-size: 15px;
   cursor: pointer;
-  margin-top: 10px;
+  margin-top: 8px;
   transition: 0.2s;
 }
 
 .submitBtn:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
+  filter: brightness(1.1);
 }
 
 .footer {
-  margin-top: 24px;
-  font-size: 14px;
+  margin-top: 20px;
+  font-size: 13px;
   color: var(--text-gray);
 }
 
 .footer a {
   color: var(--accent-green);
   text-decoration: none;
-  font-weight: 500;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  opacity: 0.5;
+}
+
+select {
+  cursor: pointer;
+  appearance: none;
 }

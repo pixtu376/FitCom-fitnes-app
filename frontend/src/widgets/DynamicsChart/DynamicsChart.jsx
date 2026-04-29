@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, Area, AreaChart } from 'recharts';
 import styles from './DynamicsChart.module.css';
 
 export default function DynamicsChart({ stats }) {
@@ -29,6 +29,7 @@ export default function DynamicsChart({ stats }) {
   }, [categories, activeTab]);
 
   const chartData = useMemo(() => {
+    if (!activeTab) return [];
     return stats
       .filter(s => s.name_stat === activeTab)
       .filter(s => s.value !== null && s.value !== undefined && !isNaN(parseFloat(s.value)))
@@ -37,84 +38,104 @@ export default function DynamicsChart({ stats }) {
         const dateObj = new Date(s.created_at);
         return {
           xAxisKey: `${dateObj.getTime()}-${index}`,
-          
           dateLabel: dateObj.toLocaleDateString('ru-RU', { day: '2-digit', month: 'short' }),
-          
           fullDate: dateObj.toLocaleString('ru-RU', { 
             day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' 
           }),
-          
           val: parseFloat(s.value),
         };
       });
   }, [stats, activeTab]);
 
+  const dataMap = useMemo(() => new Map(chartData.map(d => [d.xAxisKey, d])), [chartData]);
+
   if (!categories.length) return null;
 
   return (
-    <div className={styles.card}>
-      <div className={styles.tabsScroll}>
-        {categories.map(cat => (
-          <button 
-            key={cat.name} 
-            className={activeTab === cat.name ? styles.activeTab : styles.tab}
-            onClick={() => setActiveTab(cat.name)}
-          >
-            {cat.name}
-          </button>
-        ))}
+    <div className={styles.container}>
+      <div className={styles.tabsContainer}>
+        <div className={styles.tabsScroll}>
+          {categories.map(cat => (
+            <button 
+              key={cat.name} 
+              className={activeTab === cat.name ? styles.activeTab : styles.tab}
+              onClick={() => setActiveTab(cat.name)}
+            >
+              {cat.name}
+            </button>
+          ))}
+        </div>
       </div>
 
-      <div className={styles.chartContainer}>
-        <ResponsiveContainer width="99%" height="100%">
-          <LineChart data={chartData} margin={{ left: -20, right: 20 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#333" vertical={false} />
+      <div className={styles.chartWrapper}>
+        <ResponsiveContainer width="100%" height="100%" minHeight={250} debounce={50}>
+          <AreaChart 
+            data={chartData} 
+            margin={{ left: -15, right: 5, top: 10, bottom: 0 }}
+          >
+            <defs>
+              <linearGradient id="colorVal" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="var(--accent-green)" stopOpacity={0.3}/>
+                <stop offset="95%" stopColor="var(--accent-green)" stopOpacity={0}/>
+              </linearGradient>
+            </defs>
+            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
             
             <XAxis 
               dataKey="xAxisKey" 
-              stroke="#888" 
+              stroke="var(--text-gray)" 
               fontSize={10} 
               tickLine={false}
               axisLine={false}
-              padding={{ left: 10, right: 10 }}
-              tickFormatter={(value) => {
-                const item = chartData.find(d => d.xAxisKey === value);
-                return item ? item.dateLabel : '';
-              }}
-              minTickGap={30}
+              tickFormatter={(val) => dataMap.get(val)?.dateLabel || ''}
+              minTickGap={20}
+              dy={10}
             />
             
             <YAxis 
-              stroke="#888" 
+              stroke="var(--text-gray)" 
               fontSize={10} 
               domain={['dataMin - 1', 'dataMax + 1']} 
               tickLine={false}
               axisLine={false}
+              width={35}
             />
             
             <Tooltip 
-              contentStyle={{ backgroundColor: '#222', border: 'none', borderRadius: '8px' }}
-              labelStyle={{ color: '#fff', fontSize: '12px' }}
-              itemStyle={{ color: '#48CB9F' }}
-              labelFormatter={(value) => {
-                const item = chartData.find(d => d.xAxisKey === value);
-                return item ? item.fullDate : value;
-              }}
+              content={<CustomTooltip dataMap={dataMap} />}
+              isAnimationActive={false}
+              cursor={{ stroke: 'rgba(255,255,255,0.1)', strokeWidth: 1 }}
             />
             
-            <Line 
+            <Area 
               type="monotone"
               dataKey="val" 
-              stroke="#48CB9F" 
-              strokeWidth={3} 
-              dot={{ r: 4, fill: '#48CB9F', strokeWidth: 2, stroke: '#22252A' }}
-              activeDot={{ r: 6 }}
-              connectNulls={true} 
-              isAnimationActive={false}
+              stroke="var(--accent-green)" 
+              strokeWidth={2}
+              fillOpacity={1}
+              fill="url(#colorVal)"
+              dot={{ r: 3, fill: "var(--card-bg)", stroke: "var(--accent-green)", strokeWidth: 2 }}
+              activeDot={{ r: 5, strokeWidth: 0 }}
+              isAnimationActive={true}
             />
-          </LineChart>
+          </AreaChart>
         </ResponsiveContainer>
       </div>
     </div>
   );
 }
+
+const CustomTooltip = ({ active, payload, label, dataMap }) => {
+  if (active && payload && payload.length) {
+    const item = dataMap.get(label);
+    return (
+      <div className={styles.customTooltip}>
+        <p className={styles.tooltipDate}>{item?.fullDate}</p>
+        <p className={styles.tooltipValue}>
+          <span>Значение:</span> {payload[0].value}
+        </p>
+      </div>
+    );
+  }
+  return null;
+};

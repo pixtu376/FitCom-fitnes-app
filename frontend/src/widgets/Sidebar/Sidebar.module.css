@@ -7,7 +7,7 @@
   flex-direction: column;
   padding: 24px 16px;
   flex-shrink: 0;
-  border: none; 
+  border: none;
 }
 
 .logo {
@@ -39,48 +39,41 @@
   gap: 12px;
   padding: 12px;
   border-radius: 12px;
-  color: #94A3B8;
+  color: var(--text-gray);
   text-decoration: none;
   font-size: 15px;
-  transition: 0.2s;
+  transition: all 0.2s ease;
+  cursor: pointer;
 }
 
 .link:hover {
   background-color: rgba(255, 255, 255, 0.03);
-  color: #fff;
+  color: var(--text-main);
 }
 
-.active {
+.link.active {
   background-color: rgba(56, 161, 105, 0.1);
-  color: #fff;
-  box-shadow: inset 4px 0px 0px 0px #38A169;
+  color: var(--text-main);
+  box-shadow: inset 4px 0 0 0 #38A169;
 }
 
 .icon {
   width: 20px;
   height: 20px;
   opacity: 0.7;
+  transition: opacity 0.2s ease;
 }
 
-.active .icon {
-  filter: brightness(0) saturate(100%) invert(51%) sepia(58%) saturate(467%) hue-rotate(101deg) brightness(91%) contrast(89%);
+.link.active .icon {
   opacity: 1;
+  filter: brightness(0) saturate(100%) invert(48%) sepia(54%) saturate(420%) hue-rotate(105deg) brightness(89%) contrast(87%);
 }
 
 .bottom {
   margin-top: auto;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid var(--border-color);
   padding-top: 16px;
   display: flex;
   flex-direction: column;
   gap: 8px;
-}
-
-.user {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px;
-  font-size: 15px;
-  color: #E2E8F0;
 }

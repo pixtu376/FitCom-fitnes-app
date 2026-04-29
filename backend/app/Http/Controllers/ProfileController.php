@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\DB;
 class ProfileController extends Controller
 {
 
-// Добавьте этот метод в ProfileController
 public function updateInfo(Request $request)
 {
     $user = $request->user();
@@ -35,7 +34,7 @@ public function show(Request $request)
 {
     $user = $request->user()->load('targets');
     $availableStats = \App\Models\Stat::where('user_id', $user->user_id)
-        ->orWhereNull('user_id') // Если есть общие статистики
+        ->orWhereNull('user_id')
         ->get(['stat_id', 'name_stat']); 
 
     return response()->json([
@@ -56,9 +55,9 @@ public function updateTargets(Request $request)
             \App\Models\Target::create([
                 'target_id' => \Illuminate\Support\Str::uuid(),
                 'user_id' => $user->user_id,
-                'stat_id' => $t['stat_id'], // Теперь передаем ID
+                'stat_id' => $t['stat_id'],
                 'type_target' => $t['type_target'],
-                'name_target' => $t['name_target'], // Оставляем для совместимости
+                'name_target' => $t['name_target'],
                 'target_value' => $t['target_value'] ?? 0,
                 'is_up' => $t['is_up'] ?? true,
             ]);
@@ -68,14 +67,12 @@ public function updateTargets(Request $request)
     return response()->json(['message' => 'Цели обновлены']);
 }
 
-    // Загрузка аватара
     public function uploadAvatar(Request $request)
     {
         $user = $request->user();
         $request->validate(['avatar' => 'required|image|mimes:jpeg,png,jpg|max:5120']);
 
         if ($request->hasFile('avatar')) {
-            // Удаляем старый аватар, если это не дефолтный
             if ($user->avatar_url && $user->avatar_url !== 'default.png') {
                 Storage::disk('public')->delete('avatars/' . $user->avatar_url);
             }
@@ -94,17 +91,14 @@ public function updateTargets(Request $request)
         return response()->json(['message' => 'Файл не найден'], 400);
     }
 
-    // Смена пароля
 public function changePassword(Request $request)
 {
     $request->validate([
-        // Убираем 'current_password' => 'required|...'
         'new_password' => 'required|string|min:8|confirmed',
     ]);
 
     $user = $request->user();
     
-    // Просто обновляем пароль без проверки старого
     $user->update([
         'password' => Hash::make($request->new_password)
     ]);

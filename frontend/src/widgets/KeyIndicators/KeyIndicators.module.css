@@ -1,84 +1,77 @@
-.card {
-  background-color: #22252A;
-  border-radius: 16px;
+.wrapper {
   display: flex;
   flex-direction: column;
-  flex: 1;
-  min-height: 0;
+  height: 100%;
+  width: 100%;
   box-sizing: border-box;
+  overflow: hidden; 
 }
 
-.cardTitle {
-  font-size: 18px;
-  font-weight: 500;
-  color: #E2E8F0;
-  margin: 0;
-  flex-shrink: 0;
-}
-.indicatorsList {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+.grid {
+  display: grid;
+  grid-template-rows: repeat(5, minmax(0, 1fr)); 
   flex: 1;
-  overflow-y: auto;
-  padding-right: 10px;
-  min-height: 0; 
+  gap: 2px; 
+  margin-top: 8px;
+  min-height: 0;
 }
 
-.indicatorsList::-webkit-scrollbar {
-  width: 4px;
-}
-
-.indicatorsList::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.02);
-  border-radius: 10px;
-}
-
-.indicatorsList::-webkit-scrollbar-thumb {
-  background: #4a4d52;
-  border-radius: 10px;
-}
-
-.indicatorsList::-webkit-scrollbar-thumb:hover {
-  background: #38A169;
-}
-
-.indicatorGroup {
+.row {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  justify-content: center;
+  min-height: 0;
+  padding: 0;
 }
 
-.indicatorHeader {
+.topLine {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 14px;
-  color: #94A3B8;
-}
-
-.accent {
-  color: #38A169;
-  font-weight: 600;
-}
-
-.progressBar {
-  background-color: #1A1D21;
-  height: 10px;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.progressFill {
-  background: linear-gradient(90deg, #38A169 0%, #48CB9F 100%);
-  height: 100%;
-  border-radius: 10px;
-  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.percentageText {
   font-size: 12px;
-  color: #94A3B8;
+  line-height: 1.2;
+  margin-bottom: 2px;
+}
+
+.label { 
+  color: var(--text-gray);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.val { 
+  color: var(--accent-green); 
+  font-weight: 600; 
+  margin-left: 4px;
+}
+
+.percent {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-main);
+  padding-left: 4px;
+}
+
+.barTrack {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 2px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.barFill {
+  height: 100%;
+  background: var(--accent-green);
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+
+.goalLine {
+  font-size: 9px;
+  color: var(--text-gray);
+  opacity: 0.4;
   text-align: right;
-  font-weight: 500;
+  margin-top: 1px;
 }

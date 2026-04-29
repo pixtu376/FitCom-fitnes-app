@@ -89,8 +89,8 @@ class TrainingController extends Controller
         $request->validate([
             'plan_name' => 'required|string',
             'days' => 'required|array',
-            'days.*.name' => 'required|string', // Добавили валидацию имени дня
-            'days.*.week_day' => 'required|string', // Добавили валидацию дня недели
+            'days.*.name' => 'required|string',
+            'days.*.week_day' => 'required|string',
             'days.*.icon' => 'string',
             'days.*.color' => 'string',
             'days.*.exercises' => 'required|array',
@@ -112,8 +112,8 @@ class TrainingController extends Controller
             foreach ($request->input('days') as $dayData) {
                 $day = $plan->training_days()->create([
                     'plan_id'   => $plan->plan_id,
-                    'name'      => $dayData['name'],      // КРИТИЧНО: записываем имя
-                    'week_day'  => $dayData['week_day'],  // КРИТИЧНО: записываем день недели
+                    'name'      => $dayData['name'],
+                    'week_day'  => $dayData['week_day'],
                     'icon'      => $dayData['icon'] ?? 'dumbbell',
                     'color'     => $dayData['color'] ?? '#38A169',
                     'count_day' => $dayData['count_day']
@@ -181,15 +181,12 @@ class TrainingController extends Controller
     {
         $user_id = $request->user()->user_id;
 
-        // 1. Находим целевой план
         $plan = Training_plan::where('plan_id', $id)
             ->where('user_id', $user_id)
             ->firstOrFail();
 
-        // 2. Сбрасываем активность у всех старых планов пользователя
         Training_plan::where('user_id', $user_id)->update(['is_active' => false]);
 
-        // 3. Логика обновления дат (только если просрочен)
         $today = now()->startOfDay();
         $endDate = \Carbon\Carbon::parse($plan->end_date);
 
@@ -201,7 +198,6 @@ class TrainingController extends Controller
             $plan->end_date = now()->addDays($duration)->format('Y-m-d');
         }
 
-        // 4. Делаем план активным
         $plan->is_active = true;
         $plan->save();
 
@@ -212,7 +208,6 @@ class TrainingController extends Controller
     {
         $day = Training_day::findOrFail($id);
         
-        // Обновляем только те поля, которые пришли в запросе
         $day->update($request->only(['color', 'icon', 'name', 'week_day']));
 
         return response()->json(['message' => 'Данные дня обновлены', 'day' => $day]);

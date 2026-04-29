@@ -1,40 +1,58 @@
+
 import { NavLink } from "react-router-dom";
 import styles from "./Sidebar.module.css";
+
+const MENU_ITEMS = [
+  { path: "/dashboard", label: "Главная", icon: "/icons/dashboard.svg" },
+  { path: "/training", label: "Тренировки", icon: "/icons/gym.svg" },
+  { path: "/analytics", label: "Аналитика", icon: "/icons/chart.svg" },
+  { path: "/InGym", label: "В зале", icon: "/icons/clock.svg" },
+];
+
+const BOTTOM_ITEMS = [
+  { path: "/Profile", label: "Логин/Имя", icon: "/icons/user.svg" },
+  { path: null, label: "Настройки", icon: "/icons/settings.svg", isStatic: true },
+];
+
+const SidebarItem = ({ path, label, icon, isStatic }) => {
+  const className = ({ isActive }) => `${styles.link} ${isActive ? styles.active : ""}`;
+  const content = (
+    <>
+      <img src={icon} className={styles.icon} alt="" />
+      <span>{label}</span>
+    </>
+  );
+
+  if (isStatic) {
+    return <div className={styles.link} key={label}>{content}</div>;
+  }
+
+  return (
+    <NavLink 
+      key={path} 
+      to={path} 
+      end={path === "/dashboard"} 
+      className={className}
+    >
+      {content}
+    </NavLink>
+  );
+};
 
 export default function Sidebar() {
   return (
     <aside className={styles.sidebar}>
       <div className={styles.logo}>
-        <img src="../public/vite.svg" alt="" className={styles.logoIcon} />
-        FitCon
+        <img src="/vite.svg" alt="FitCon" className={styles.logoIcon} />
+        <span>FitCon</span>
       </div>
+
       <nav className={styles.nav}>
-        <NavLink to="/dashboard" className={({ isActive }) => isActive ? `${styles.link} ${styles.active}` : styles.link}>
-          <img src="../public/icons/dashboard.svg" className={styles.icon} alt="" />
-          Главная
-        </NavLink>
-        <NavLink to="/training" className={({ isActive }) => isActive ? `${styles.link} ${styles.active}` : styles.link}>
-          <img src="../public/icons/gym.svg" className={styles.icon} alt="" />
-          Тренировки
-        </NavLink>
-        <NavLink to="/analytics" className={({ isActive }) => isActive ? `${styles.link} ${styles.active}` : styles.link}>
-          <img src="../public/icons/chart.svg" className={styles.icon} alt="" />
-          Аналитика
-        </NavLink>
-        <NavLink to="/InGym" className={({ isActive }) => isActive ? `${styles.link} ${styles.active}` : styles.link}>
-          <img src="../public/icons/clock.svg" className={styles.icon} alt="" />
-          В зале
-        </NavLink>
+        {MENU_ITEMS.map(SidebarItem)}
       </nav>
+
       <div className={styles.bottom}>
-        <NavLink to="/Profile" className={({ isActive }) => isActive ? `${styles.link} ${styles.active}` : styles.link}>
-          <img src="../public/icons/user.svg" className={styles.icon} alt="" />
-          Логин/Имя
-        </NavLink>
-        <div className={styles.link}>
-          <img src="../public/icons/settings.svg" className={styles.icon} alt="" />
-          Настройки
-        </div>
+        {BOTTOM_ITEMS.map(SidebarItem)}
       </div>
     </aside>
   );

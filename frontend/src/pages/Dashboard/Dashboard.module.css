@@ -1,226 +1,108 @@
 .layout {
-  display: flex;
-  width: 100%;
+  composes: app-layout from global;
   height: 100vh;
-  background-color: #1A1D21;
+  max-height: 100vh;
   overflow: hidden;
-  color: #fff;
-  padding: 24px;
-  box-sizing: border-box;
-  gap: 24px;
+  display: flex;
+  padding: var(--gap-main);
+  gap: var(--gap-main);
+}
+
+.sidebarDesktopWrapper {
+  flex-shrink: 0;
+  height: 100%;
 }
 
 .main {
+  composes: app-main from global;
   flex: 1;
-  min-width: 0;
   height: 100%;
+  min-height: 0;
   display: flex;
   flex-direction: column;
+  padding: 0 !important;
 }
 
 .contentGrid {
+  composes: content-grid from global;
   display: grid;
-  grid-template-columns: 380px 1fr;
-  gap: 24px;
+  grid-template-columns: 0.4fr 0.6fr;
+  gap: var(--gap-main);
   height: 100%;
   min-height: 0;
-  align-items: stretch;
 }
 
 .leftCol, .rightCol {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: var(--gap-main);
   height: 100%;
   min-height: 0;
 }
 
-.card {
-  background-color: #22252A;
-  border-radius: 20px;
-  padding: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  display: flex;
-  flex-direction: column;
-}
-
-.cardHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.cardTitle {
-  font-size: 18px;
-  font-weight: 500;
-  color: #fff;
-  margin: 0;
-}
-
-.cardSubtitle {
-  font-size: 13px;
-  color: #888;
-}
-
-.accentText {
-  color: #48CB9F;
-  font-size: 14px;
-  font-weight: 600;
-}
-
-/* Флекс-коэффициенты для карточек на десктопе */
-.calendarCard {
-  flex: 0 0 auto;
+.desktopCalendarCard {
+  flex-shrink: 0;
 }
 
 .chartCard {
+  composes: base-card from global;
   flex: 1;
+  min-height: 0; 
   display: flex;
   flex-direction: column;
-  min-height: 0;
 }
 
 .workoutCard {
-  flex: 2;
+  composes: base-card from global;
+  flex: 1.2;
   min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.analyticsNutritionRow {
+  flex: 0.8;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-main);
 }
 
 .nutritionCard {
-  flex: 0 0 auto;
-  min-height: 140px;
-}
-
-.chartContainer {
+  composes: base-card from global;
   flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
+}
+
+.chartWrapper,
+.nutritionWrapper {
+  flex: 1;
   min-height: 0;
   width: 100%;
+  position: relative;
 }
 
-.listContainer::-webkit-scrollbar {
-  width: 4px;
-}
-.listContainer::-webkit-scrollbar-thumb {
-  background: #333;
-  border-radius: 10px;
-}
-
-/* Обертка для сайдбара (скроем её на мобильных) */
-.sidebarDesktopWrapper {
-  display: block;
-}
-
-.calendarSection {
-  display: none;
-}
-
-/* Обертка для мобильной шапки (скроем её на десктопе) */
-.mobileHeaderWrapper {
-  display: none;
-}
+.cardTitle { composes: card-title from global; }
 
 @media (max-width: 1200px) {
-
-  .analyticsNutritionRow {
-    display: flex !important;
-    flex-direction: row !important;
-    gap: 12px !important;
-    width: 100% !important;
-    margin-bottom: 16px !important; /* отступ перед следующей секцией, если нужно */
+  .layout {
+    height: auto;
+    max-height: none;
+    overflow: auto;
+    display: block;
+    padding: 0;
   }
-
-  /* Скрываем оригинальную аналитику из leftCol на мобильке */
-  .leftCol .chartCard {
-    display: none !important;
-  }
-
-  /* Карточки в ряду 60/40 */
-  .chartCard,
-  .nutritionCard {
-    height: 240px !important;
-    padding: 16px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    box-sizing: border-box !important;
-    flex-shrink: 0 !important;
-  }
-
-  .chartCard {
-    width: calc(60% - 6px) !important;
-  }
-
-  .nutritionCard {
-    width: calc(40% - 6px) !important;
-  }
-
-  /* Внутренние обёртки графиков */
-  .chartWrapper,
-  .nutritionWrapper {
-    flex: 1 !important;
-    width: 100% !important;
-    min-height: 0 !important;
-    position: relative !important;
-  }
-
-  /* Остальные мобильные стили (оставь свои текущие) */
-  .layout, .main {
-    display: block !important;
-    height: auto !important;
-    min-height: 100vh !important;
-    overflow-y: auto !important;
-    background-color: #1A1D21;
-  }
-
-  .sidebarDesktopWrapper, 
-  .desktopCalendarCard, 
-  .desktopOnlyCalendar {
-    display: none !important;
-  }
-
   .main {
-    padding: 16px 16px 120px 16px !important;
-    box-sizing: border-box !important;
+    padding: 16px 16px 100px 16px !important;
+    height: auto;
   }
-
   .contentGrid {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 16px !important;
-    width: 100% !important;
+    display: flex;
+    flex-direction: column;
   }
-
-  .rightCol {
-    order: 1 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 16px !important;
-    width: 100% !important;
-  }
-
-  .workoutCard {
-    width: 100% !important;
-    height: auto !important;
-    padding: 20px !important;
-  }
-
-  .leftCol {
-    order: 2 !important;
-    display: flex !important;
-    flex-direction: column !important;
-  }
-
-  .cardTitle {
-    font-size: 14px !important;
-    margin-bottom: 8px !important;
-    color: rgba(255, 255, 255, 0.6) !important;
-  }
-
-  .mobileHeaderWrapper,
-  .mobileCalendar {
-    display: block !important;
-    width: 100% !important;
-    margin-bottom: 20px !important;
+  .chartCard, .nutritionCard {
+    height: 300px;
   }
 }

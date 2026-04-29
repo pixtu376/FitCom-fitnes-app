@@ -51,10 +51,10 @@ class AnalyticsController extends Controller
             foreach ($validated['measurements'] as $data) {
                 $createdStats[] = Stat::create([
                     'user_id'   => $user->user_id,
-                    'name_stat' => $data['name_stat'], // Берем из $data
+                    'name_stat' => $data['name_stat'],
                     'value'     => $data['value'],
                     'unit'      => $data['unit'],
-                    'type'      => 'default' // или другой дефолт
+                    'type'      => 'default'
                 ]);
             }
             return response()->json([
@@ -64,77 +64,86 @@ class AnalyticsController extends Controller
         });
     }
 
-    public function add_photo (Request $request) {
+public function add_photo(Request $request) 
+    {
         $user = $request->user();
 
         $request->validate([
-            'photo' => 'required|image|mimes:jpeg,png,jpg|max:5120',
+            'photo' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',
             'is_before' => 'required|boolean'
         ]);
 
-        if ($request->hasFile('photo')){
+        if ($request->hasFile('photo')) {
             $file = $request->file('photo');
             $isBefore = $request->boolean('is_before');
 
-            $fileName = Str::uuid().'.'.$file->getClientOriginalExtension();
-            $path = $file->storeAs('stats', $fileName, 'public');
+            $fileName = Str::uuid() . '.' . $file->getClientOriginalExtension();
 
-            $photo = DB::transaction(function () use ($fileName, $user, $isBefore) {
-                if ($isBefore) {
-                    Photo_stat::where('user_id', $user->user_id)
-                        ->where('is_before', true)
-                        ->update(['is_before' => false]);
+            return DB::transaction(function () use ($file, $fileName, $user, $isBefore) {
+                
+                $oldPhoto = Photo_stat::where('user_id', $user->user_id)
+                    ->where('is_before', $isBefore)
+                    ->first();
+
+                if ($oldPhoto) {
+                    $oldPath = 'stats/' . $oldPhoto->name_photo;
+                    if (Storage::disk('public')->exists($oldPath)) {
+                        Storage::disk('public')->delete($oldPath);
+                    }
+                    $oldPhoto->delete();
                 }
-                return Photo_stat::create([
+
+                $file->storeAs('stats', $fileName, 'public');
+
+                $photo = Photo_stat::create([
                     'user_id' => $user->user_id,
                     'name_photo' => $fileName,
                     'is_before' => $isBefore
                 ]);
+
+                return response()->json([
+                    'message' => 'Фото успешно обновлено',
+                    'photo' => $photo,
+                    'url' => asset(Storage::url('stats/' . $fileName))
+                ]);
             });
+        }
 
-            return response()->json([
-                'message' => 'фото сохранено',
-                'photo' => $photo,
-                'url' => Storage::url($path) 
-            ]);
-        };
-
-        return response()->json(['message' => 'Фотография не найдена'], 400);
+        return response()->json(['message' => 'Файл не получен'], 400);
     }
 
-    public function destroy_photo (Request $request, $id)
+    public function view_photo(Request $request) 
     {
         $user = $request->user();
 
-        $photo = Photo_stat::where("photo_id", $id)
-            ->where('user_id', $user->user_id)
-            ->first();
-        if (!$photo) {
-            return response()->json(['message' => 'Не удалось удалить'], 404);
-        }
+        $photos = Photo_stat::where('user_id', $user->user_id)
+            ->orderBy('is_before', 'desc')
+            ->get()
+            ->map(function ($photo) {
+                $path = 'stats/' . $photo->name_photo;
+                $photo->url = Storage::disk('public')->exists($path) 
+                    ? asset(Storage::url($path)) 
+                    : null;
+                return $photo;
+            });
+
+        return response()->json($photos);
+    }
+
+    public function destroy_photo(Request $request, $id)
+    {
+        $user = $request->user();
+        $photo = Photo_stat::where("photo_id", $id)->where('user_id', $user->user_id)->first();
+
+        if (!$photo) return response()->json(['message' => 'Фото не найдено'], 404);
 
         $filePath = 'stats/' . $photo->name_photo;
-
         if (Storage::disk('public')->exists($filePath)) {
             Storage::disk('public')->delete($filePath);
         }
 
         $photo->delete();
-
-        return response()->json(['message' => 'Фотография успешно удалена']);
-    }
-
-    public function view_photo (Request $request) {
-        $user= $request->user();
-
-        $photos = Photo_stat::where('user_id', $user->user_id)
-        ->get()
-        ->map(function ($photo) {
-            $photo->url = asset(Storage::url('stats/' . $photo->name_photo));
-            return $photo;
-        });
-
-        return response()->json($photos);
+        return response()->json(['message' => 'Фотография удалена']);
     }
 
     public function destroy_stat_by_name(Request $request)
@@ -146,7 +155,6 @@ class AnalyticsController extends Controller
             'names.*' => 'required|string'
         ]);
 
-        // Удаляем все записи для этого пользователя, где имя совпадает с выбранными
         Stat::where('user_id', $user->user_id)
             ->whereIn('name_stat', $validated['names'])
             ->delete();

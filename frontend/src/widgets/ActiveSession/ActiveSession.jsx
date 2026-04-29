@@ -10,14 +10,12 @@ export default function ActiveSession({ onStart, onStepComplete, onFinish }) {
   const [exerciseLogs, setExerciseLogs] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Реф для хранения ссылок на карточки упражнений
   const itemRefs = useRef([]);
 
   useEffect(() => {
     fetchActivePlan();
   }, []);
 
-  // Автоскролл при изменении текущего упражнения
   useEffect(() => {
     if (sessionState === 'active' && itemRefs.current[currentIndex]) {
       itemRefs.current[currentIndex].scrollIntoView({
@@ -67,7 +65,6 @@ export default function ActiveSession({ onStart, onStepComplete, onFinish }) {
         weight: ex.weight
       }));
       setExerciseLogs(initialLogs);
-      // Сбрасываем массив рефов под новое количество упражнений
       itemRefs.current = new Array(initialLogs.length).fill(null);
     }
   };

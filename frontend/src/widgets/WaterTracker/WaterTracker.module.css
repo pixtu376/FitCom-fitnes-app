@@ -1,4 +1,3 @@
-/* Основные стили */
 .card { background-color: #22252A; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 16px; height: 100%; box-sizing: border-box;}
 .label { color: #fff; font-size: 16px; font-weight: 400; }
 .content { display: flex; gap: 20px; align-items: center; flex: 1; }
@@ -18,7 +17,6 @@
 .controls button:hover { background: #333; }
 .controls button:not(:last-child) { border-right: 1px solid #333; }
 
-/* Мобильные стили */
 .mobileMode {
   padding: 16px;
 }

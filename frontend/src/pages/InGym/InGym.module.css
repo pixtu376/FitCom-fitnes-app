@@ -97,7 +97,7 @@
 
   .rightCol {
     order: 1; 
-    height: 65vh; /* Ограничиваем высоту для удобного скролла сессии */
+    height: 65vh;
   }
 
   .leftCol {
@@ -107,7 +107,7 @@
   .widgetsRow {
     flex-direction: row;
     gap: 12px;
-    height: 160px; /* Фиксированная высота для карточек в одну строку */
+    height: 160px;
   }
 
   .timerCardWrapper, .waterCardWrapper {

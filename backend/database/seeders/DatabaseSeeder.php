@@ -19,7 +19,6 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. Создаём пользователя (UUID генерируется моделью или БД)
         $user = User::create([
             'name'       => 'Денис',
             'email'      => 'denis@example.com',
@@ -29,8 +28,6 @@ class DatabaseSeeder extends Seeder
             'birth_day'  => '2000-01-01',
         ]);
         
-        // 3. Статистика (История для графиков)
-        // Вес тела (несколько записей для динамики)
         $weights = [98.5, 96.2, 94.8, 93.5, 91.8];
         foreach ($weights as $index => $w) {
             Stat::create([
@@ -44,7 +41,6 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // Другие замеры (Последние актуальные)
         $measurements = [
             ['name' => 'Бицепс П', 'val' => 39.0, 'unit' => 'см', 'type' => 'important'],
             ['name' => 'Бицепс Л', 'val' => 38.8, 'unit' => 'см', 'type' => 'important'],
@@ -64,8 +60,6 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // 4. ЦЕЛИ (Targets) — для виджета "Ключевые показатели"
-        // Цель по весу
         $weightStat = Stat::where('name_stat', 'Вес тела')->orderBy('created_at', 'desc')->first();
         DB::table('target')->insert([
             'target_id'    => (string) Str::uuid(),
@@ -76,7 +70,6 @@ class DatabaseSeeder extends Seeder
             'is_up'        => false, 
         ]);
 
-        // Цель по жиму
         $benchStat = Stat::where('name_stat', 'Жим лежа')->first();
         DB::table('target')->insert([
             'target_id'    => (string) Str::uuid(),
@@ -87,7 +80,6 @@ class DatabaseSeeder extends Seeder
             'is_up'        => true,
         ]);
 
-        // 5. ТРЕНИРОВОЧНЫЕ ПЛАНЫ (Активный)
         $activePlan = Training_plan::create([
             'plan_id'    => (string) Str::uuid(),
             'user_id'    => $user->user_id,
@@ -121,8 +113,6 @@ class DatabaseSeeder extends Seeder
             ]
         ]);
 
-        // 6. ФОТОГРАФИИ (Заглушки)
-        // Примечание: файлы должны физически лежать в storage/app/public/stats/
         Photo_stat::create([
             'photo_id' => (string) Str::uuid(),
             'user_id'       => $user->user_id,

@@ -11,27 +11,29 @@ import MeasurementsPanel from "../../widgets/MeasurementsPanel/MeasurementsPanel
 import DynamicsChart from "../../widgets/DynamicsChart/DynamicsChart";
 import KeyIndicators from "../../widgets/KeyIndicators/KeyIndicators";
 
+const MOBILE_BREAKPOINT = 1200;
+
 export default function AnalyticsPage() {
   const queryClient = useQueryClient();
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 1200);
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < MOBILE_BREAKPOINT);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Следим за размером экрана
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 1200);
+    const handleResize = () => setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Получаем данные пользователя (для хедера и статистики)
-  const { data: user, isLoading: userLoading } = useQuery({
+  const { data: user, isLoading: userLoading, isError: userError } = useQuery({
     queryKey: ["userData"],
     queryFn: async () => {
       const response = await api.get("/user");
       return response.data;
     },
+    staleTime: 1000 * 60 * 5,
   });
 
-  const { data: stats, isLoading: statsLoading, refetch: refetchStats } = useQuery({
+  const { data: stats, isLoading: statsLoading, isError: statsError, refetch: refetchStats } = useQuery({
     queryKey: ["userStats"],
     queryFn: async () => {
       const response = await api.get("/user/view_stat");
@@ -39,9 +41,7 @@ export default function AnalyticsPage() {
     }
   });
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const { data: photos, isLoading: photosLoading, refetch: refetchPhotos } = useQuery({
+  const { data: photos, isLoading: photosLoading, isError: photosError, refetch: refetchPhotos } = useQuery({
     queryKey: ["userPhotos"],
     queryFn: async () => {
       const response = await api.get("/user/view_photo");
@@ -54,11 +54,23 @@ export default function AnalyticsPage() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["userPhotos"] }),
   });
 
-  if (statsLoading || photosLoading || userLoading) return null;
+  if (userLoading || statsLoading || photosLoading) {
+    return <div className="app-loader">Загрузка аналитики...</div>;
+  }
+
+  if (userError || statsError || photosError) {
+    return (
+      <div className="app-error">
+        <p>Ошибка при загрузке данных аналитики</p>
+        <button onClick={() => { refetchStats(); refetchPhotos(); }} className="app-btn-retry">
+          Повторить
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.layout}>
-      {/* Десктопный сайдбар */}
       {!isMobile && (
         <div className={styles.sidebarDesktopWrapper}>
           <Sidebar user={user} />
@@ -66,21 +78,19 @@ export default function AnalyticsPage() {
       )}
 
       <main className={styles.main}>
-        {/* Мобильный хедер */}
         {isMobile && <MobileHeader user={user} />}
 
         <div className={styles.contentGrid}>
-          {/* Левая колонка: Фото и Замеры */}
           <div className={styles.leftCol}>
-            <div className={styles.card}>
-               <ProgressGallery 
+            <div className={`${styles.card} ${styles.galleryCard}`}>
+              <ProgressGallery 
                 photos={photos || []} 
                 onDelete={(id) => deletePhotoMutation.mutate(id)} 
                 refetch={refetchPhotos}
               />
             </div>
             
-            <div className={styles.card}>
+            <div className={`${styles.card} ${styles.measurementsCard}`}>
               <MeasurementsPanel 
                 stats={stats} 
                 refetch={refetchStats} 
@@ -90,7 +100,6 @@ export default function AnalyticsPage() {
             </div>
           </div>
 
-          {/* Правая колонка: Графики и Индикаторы */}
           <div className={styles.rightCol}>
             <div className={`${styles.card} ${styles.chartCard}`}>
               <h3 className={styles.cardTitle}>Динамика изменений</h3>
@@ -99,14 +108,13 @@ export default function AnalyticsPage() {
               </div>
             </div>
 
-            <div className={styles.card}>
+            <div className={`${styles.card} ${styles.indicatorsCard}`}>
               <KeyIndicators stats={stats || []} />
             </div>
           </div>
         </div>
       </main>
 
-      {/* Мобильное меню */}
       {isMobile && <MobileNav />}
     </div>
   );

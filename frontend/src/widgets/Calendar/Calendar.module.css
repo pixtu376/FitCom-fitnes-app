@@ -1,7 +1,8 @@
 .calendarContainer {
-  background: #22252A;
+  background: var(--card-bg);
   padding: 24px;
-  border-radius: 20px;
+  border-radius: var(--radius-card);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .monthTitle {
@@ -9,6 +10,7 @@
   font-weight: 500;
   margin-bottom: 20px;
   text-transform: capitalize;
+  color: var(--text-main);
 }
 
 .weekDays {
@@ -20,7 +22,7 @@
 
 .weekLabel {
   font-size: 12px;
-  color: #666;
+  color: var(--text-gray);
 }
 
 .grid {
@@ -43,27 +45,36 @@
   justify-content: center;
   border-radius: 50%;
   font-size: 14px;
+  color: var(--text-main);
   cursor: pointer;
-  transition: 0.2s;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.dayCell:hover {
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
 .hasWorkout {
-  border: 1px solid #48CB9F;
+  border-color: #48CB9F;
 }
 
 .today {
   background: #48CB9F;
   color: #1A1D21;
+  border-color: transparent;
 }
 
 .notCurrent {
-  color: #444;
+  color: var(--text-gray);
+  opacity: 0.5;
 }
 
 .mobileMode {
-  background: #22252A;
+  background: var(--card-bg);
   padding: 12px 20px;
   border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .mobileGrid {
@@ -74,12 +85,15 @@
 
 .mobileWeekLabel {
   font-size: 11px;
-  color: #888;
+  color: var(--text-gray);
   margin-bottom: 6px;
+  text-align: center;
+  min-width: 24px;
 }
 
 .activeText {
   color: #48CB9F;
+  font-weight: 600;
 }
 
 @media (max-width: 500px) {

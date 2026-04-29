@@ -1,4 +1,5 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 import styles from "./MobileHeader.module.css";
 
 export default function MobileHeader({ user }) {
@@ -11,9 +12,9 @@ export default function MobileHeader({ user }) {
         <span className={styles.logoText}>FitCon</span>
       </div>
       <div className={styles.userSection}>
-        <div className={styles.avatar}>
+        <NavLink to="/Profile" className={styles.avatar}>
           <img src="/icons/user.svg" alt="User" />
-        </div>
+        </NavLink>
       </div>
     </header>
   );
