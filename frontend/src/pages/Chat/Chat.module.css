@@ -1,0 +1,286 @@
+.layout {
+  composes: app-layout from global;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+}
+
+.sidebarDesktopWrapper {
+  flex-shrink: 0;
+  height: 100%;
+}
+
+.main {
+  composes: app-main from global;
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.chatPageContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: var(--gap-main);
+  min-height: 0;
+}
+
+.contactsSection {
+  composes: base-card from global;
+  padding: 16px;
+  flex-shrink: 0;
+}
+
+.sectionHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.sectionTitle {
+    font-size: 14px;
+    color: var(--text-gray);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.addBtnCircle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--accent-green);
+    color: var(--bg-dark);
+    border: none;
+    font-weight: bold;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+}
+
+.addBtnCircle:hover {
+    transform: scale(1.1);
+}
+
+.wheelWrapper {
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+
+.wheelWrapper::-webkit-scrollbar { height: 4px; }
+.wheelWrapper::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+
+.wheel {
+  display: flex;
+  gap: 20px;
+}
+
+.contactItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  min-width: 60px;
+}
+
+.avatarContainer {
+    position: relative;
+}
+
+.contactAvatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  object-fit: cover;
+  transition: all 0.3s;
+  background: var(--bg-dark);
+}
+
+.contactMiniName {
+    font-size: 11px;
+    color: var(--text-gray);
+    max-width: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.activeContact .contactAvatar {
+  border-color: var(--accent-green);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 10px rgba(74, 222, 128, 0.2);
+}
+
+.activeContact .contactMiniName {
+    color: var(--accent-green);
+    font-weight: 600;
+}
+
+.pinIcon {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  font-size: 10px;
+}
+
+.chatContainer {
+  composes: base-card from global;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.activeUserInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.01);
+}
+
+.activeUserMeta {
+    display: flex;
+    flex-direction: column;
+}
+
+.userName {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.onlineStatus {
+    font-size: 10px;
+    color: var(--accent-green);
+}
+
+.profileLink {
+  font-size: 12px;
+  color: var(--accent-green);
+  text-decoration: none;
+  padding: 6px 14px;
+  border: 1px solid var(--accent-green);
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.profileLink:hover {
+    background: var(--accent-green);
+    color: var(--bg-dark);
+}
+
+.chatWindow {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.messagesList {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.01) 1px, transparent 0);
+  background-size: 32px 32px;
+}
+
+.messageRow {
+  display: flex;
+  width: 100%;
+}
+
+.msgIncoming { justify-content: flex-start; }
+.msgOutgoing { justify-content: flex-end; }
+
+.messageBubble {
+  max-width: 75%;
+  padding: 12px 16px;
+  border-radius: 16px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.msgIncoming .messageBubble {
+  background: var(--bg-dark);
+  color: var(--text-main);
+  border-bottom-left-radius: 2px;
+  border: 1px solid var(--border-color);
+}
+
+.msgOutgoing .messageBubble {
+  background: var(--accent-green);
+  color: var(--bg-dark);
+  border-bottom-right-radius: 2px;
+  font-weight: 500;
+}
+
+.msgTime {
+  display: block;
+  font-size: 9px;
+  opacity: 0.6;
+  margin-top: 4px;
+  text-align: right;
+}
+
+.inputArea {
+  display: flex;
+  gap: 12px;
+  padding: 16px 20px;
+  background: var(--card-bg);
+  border-top: 1px solid var(--border-color);
+}
+
+.chatInput {
+  flex: 1;
+  background: var(--bg-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 12px 16px;
+  color: var(--text-main);
+  outline: none;
+}
+
+.chatInput:focus { border-color: var(--accent-green); }
+
+.sendBtn {
+  background: var(--accent-green);
+  color: var(--bg-dark);
+  border: none;
+  border-radius: 12px;
+  width: 48px;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s;
+}
+
+.sendBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.emptyState {
+  margin: auto;
+  color: var(--text-gray);
+  font-size: 14px;
+}
+
+@media (max-width: 1200px) {
+  .chatPageContent { padding: 0; gap: 0; }
+  .contactsSection { border-radius: 0; border: none; border-bottom: 1px solid var(--border-color); }
+  .chatContainer { border-radius: 0; border: none; }
+}

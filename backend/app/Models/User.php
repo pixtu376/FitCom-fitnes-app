@@ -23,9 +23,9 @@ class User extends Authenticatable
 
     protected $keyType = 'string';
 
-    public function bju(): HasMany
+    public function trainerProfile()
     {
-        return $this->hasMany(Bju::class, 'user_id', 'user_id');
+        return $this->hasOne(TrainerProfile::class);
     }
 
     public function training_plans(): HasMany

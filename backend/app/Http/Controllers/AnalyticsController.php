@@ -6,38 +6,55 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Photo_stat;
 use App\Models\Stat;
+use App\Models\StatName;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class AnalyticsController extends Controller
 {
-    public function view_stat (Request $request)
-    {
-        $user = $request->user();
-
-        $stats = Stat::with('targets')
-        ->where('user_id', $user->user_id)->get();
-        return response()->json($stats);
-    }
-
-    public function view_date_stat (Request $request, $date)
-    {
-        $user = $request->user();
-
-        $stats = Stat::where('user_id', $user->user_id)
-        ->whereDate('created_at', '<=', $date)
-        ->select('name_stat', 'value', 'unit', 'created_at')
-        ->orderBy('created_at', 'desc')
+public function view_stat(Request $request)
+{
+    $user = $request->user();
+    
+    $targets = \App\Models\Target::where('user_id', $user->user_id)->get();
+    
+    $stats = Stat::with(['statName'])
+        ->where('user_id', $user->user_id)
         ->get()
-        ->unique('name_stat');
+        ->map(function($stat) use ($targets) {
+            $stat->name_stat = $stat->statName->name ?? 'Неизвестно';
+            $stat->targets = $targets->where('id_stat_name', $stat->id_stat_name)->values();
+            return $stat;
+        });
 
-        return response()->json($stats->values());
-    }
+    return response()->json($stats);
+}
 
-    public function create_stat (Request $request)
+    public function view_date_stat(Request $request, $date)
     {
         $user = $request->user();
 
+        $stats = Stat::with('statName')
+            ->where('user_id', $user->user_id)
+            ->whereDate('created_at', '<=', $date)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $uniqueStats = $stats->unique('id_stat_name')->map(function ($stat) {
+            return [
+                'name_stat' => $stat->statName->name ?? 'Неизвестно',
+                'value' => $stat->value,
+                'unit' => $stat->unit,
+                'created_at' => $stat->created_at
+            ];
+        });
+
+        return response()->json($uniqueStats->values());
+    }
+
+    public function create_stat(Request $request)
+    {
+        $user = $request->user();
         $validated = $request->validate([
             'measurements' => 'required|array',
             'measurements.*.name_stat' => 'required|string',
@@ -45,26 +62,26 @@ class AnalyticsController extends Controller
             'measurements.*.unit' => 'required|string'
         ]);
 
-        return DB::transaction(function() use ($validated, $user) {
+        return DB::transaction(function () use ($validated, $user) {
             $createdStats = [];
 
             foreach ($validated['measurements'] as $data) {
+                $statName = StatName::firstOrCreate(['name' => $data['name_stat']]);
+
                 $createdStats[] = Stat::create([
-                    'user_id'   => $user->user_id,
-                    'name_stat' => $data['name_stat'],
-                    'value'     => $data['value'],
-                    'unit'      => $data['unit'],
-                    'type'      => 'default'
+                    'stat_id'      => (string) Str::uuid(),
+                    'user_id'      => $user->user_id,
+                    'id_stat_name' => $statName->id_stat_name,
+                    'value'        => $data['value'],
+                    'unit'         => $data['unit'],
+                    'type'         => 'default'
                 ]);
             }
-            return response()->json([
-                'message' => 'Сохранено',
-                'data'    => $createdStats
-            ], 200);
+            return response()->json(['message' => 'Сохранено', 'data' => $createdStats]);
         });
     }
 
-public function add_photo(Request $request) 
+    public function add_photo(Request $request)
     {
         $user = $request->user();
 
@@ -76,11 +93,9 @@ public function add_photo(Request $request)
         if ($request->hasFile('photo')) {
             $file = $request->file('photo');
             $isBefore = $request->boolean('is_before');
-
             $fileName = Str::uuid() . '.' . $file->getClientOriginalExtension();
 
             return DB::transaction(function () use ($file, $fileName, $user, $isBefore) {
-                
                 $oldPhoto = Photo_stat::where('user_id', $user->user_id)
                     ->where('is_before', $isBefore)
                     ->first();
@@ -96,9 +111,10 @@ public function add_photo(Request $request)
                 $file->storeAs('stats', $fileName, 'public');
 
                 $photo = Photo_stat::create([
-                    'user_id' => $user->user_id,
+                    'photo_id'   => (string) Str::uuid(),
+                    'user_id'    => $user->user_id,
                     'name_photo' => $fileName,
-                    'is_before' => $isBefore
+                    'is_before'  => $isBefore
                 ]);
 
                 return response()->json([
@@ -112,7 +128,7 @@ public function add_photo(Request $request)
         return response()->json(['message' => 'Файл не получен'], 400);
     }
 
-    public function view_photo(Request $request) 
+    public function view_photo(Request $request)
     {
         $user = $request->user();
 
@@ -121,8 +137,8 @@ public function add_photo(Request $request)
             ->get()
             ->map(function ($photo) {
                 $path = 'stats/' . $photo->name_photo;
-                $photo->url = Storage::disk('public')->exists($path) 
-                    ? asset(Storage::url($path)) 
+                $photo->url = Storage::disk('public')->exists($path)
+                    ? asset(Storage::url($path))
                     : null;
                 return $photo;
             });
@@ -149,14 +165,16 @@ public function add_photo(Request $request)
     public function destroy_stat_by_name(Request $request)
     {
         $user = $request->user();
-        
         $validated = $request->validate([
             'names' => 'required|array',
             'names.*' => 'required|string'
         ]);
 
+        $nameIds = StatName::whereIn('name', $validated['names'])
+            ->pluck('id_stat_name');
+
         Stat::where('user_id', $user->user_id)
-            ->whereIn('name_stat', $validated['names'])
+            ->whereIn('id_stat_name', $nameIds)
             ->delete();
 
         return response()->json(['message' => 'Выбранные параметры удалены']);

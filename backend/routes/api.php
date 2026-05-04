@@ -5,6 +5,7 @@
     use App\Http\Controllers\AnalyticsController;
     use App\Http\Controllers\GymSessionController;
     use App\Http\Controllers\ProfileController;
+    use App\Http\Controllers\ChatController;
     use Illuminate\Support\Facades\Route;
 
     Route::post('/register', [AuthController::class, 'register']);
@@ -49,4 +50,18 @@
         Route::post('/user/avatar', [ProfileController::class, 'uploadAvatar']);
         Route::post('/user/password', [ProfileController::class, 'changePassword']);
         Route::post('/user/targets', [ProfileController::class, 'updateTargets']);
+
+
+        Route::get('/chat/contacts', [ChatController::class, 'getContacts']);
+    
+    // Получить сообщения с конкретным пользователем
+    // Ожидает query-параметр ?contact_id=...
+    Route::get('/chat/messages', [ChatController::class, 'getMessages']);
+    
+    // Отправить сообщение
+    // Ожидает JSON { "receiver_id": ..., "message": "..." }
+    Route::post('/chat/messages', [ChatController::class, 'sendMessage']);
+    
+    // Вспомогательный роут: получение профиля для "второго клика"
+    Route::get('/chat/user/{uuid}', [ChatController::class, 'getUserProfile']);
     });

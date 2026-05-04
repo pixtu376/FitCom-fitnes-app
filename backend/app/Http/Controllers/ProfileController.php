@@ -32,10 +32,9 @@ public function updateInfo(Request $request)
 
 public function show(Request $request)
 {
-    $user = $request->user()->load('targets');
-    $availableStats = \App\Models\Stat::where('user_id', $user->user_id)
-        ->orWhereNull('user_id')
-        ->get(['stat_id', 'name_stat']); 
+    $user = $request->user()->load('targets.statName');
+    
+    $availableStats = \App\Models\StatName::orderBy('name')->get(['id_stat_name as id', 'name']); 
 
     return response()->json([
         'user' => $user,
@@ -53,13 +52,13 @@ public function updateTargets(Request $request)
     foreach ($targetsData as $t) {
         if (!empty($t['stat_id'])) {
             \App\Models\Target::create([
-                'target_id' => \Illuminate\Support\Str::uuid(),
+                'target_id' => (string) \Illuminate\Support\Str::uuid(),
                 'user_id' => $user->user_id,
-                'stat_id' => $t['stat_id'],
+                'id_stat_name' => $t['stat_id'],
                 'type_target' => $t['type_target'],
-                'name_target' => $t['name_target'],
                 'target_value' => $t['target_value'] ?? 0,
-                'is_up' => $t['is_up'] ?? true,
+                'is_up' => filter_var($t['is_up'], FILTER_VALIDATE_BOOLEAN),
+                'is_active' => true,
             ]);
         }
     }

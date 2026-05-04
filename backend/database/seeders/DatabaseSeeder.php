@@ -1,5 +1,6 @@
 <?php
 
+// database/seeders/DatabaseSeeder.php
 namespace Database\Seeders;
 
 use App\Models\User;
@@ -8,9 +9,10 @@ use App\Models\Training_day;
 use App\Models\Exercise;
 use App\Models\Workout_exercise;
 use App\Models\Stat;
+use App\Models\Target;
 use App\Models\Photo_stat;
+use App\Models\StatName;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
@@ -27,17 +29,19 @@ class DatabaseSeeder extends Seeder
             'avatar_url' => 'default.png',
             'birth_day'  => '2000-01-01',
         ]);
+
+        $snWeight = StatName::firstOrCreate(['name' => 'Вес тела']);
         
         $weights = [98.5, 96.2, 94.8, 93.5, 91.8];
         foreach ($weights as $index => $w) {
             Stat::create([
-                'stat_id'    => (string) Str::uuid(),
-                'user_id'    => $user->user_id,
-                'name_stat'  => 'Вес тела',
-                'value'      => $w,
-                'unit'       => 'кг',
-                'type'       => 'main',
-                'created_at' => Carbon::now()->subMonths(4 - $index),
+                'stat_id'      => (string) Str::uuid(),
+                'user_id'      => $user->user_id,
+                'id_stat_name' => $snWeight->id_stat_name,
+                'value'        => $w,
+                'unit'         => 'кг',
+                'type'         => 'main',
+                'created_at'   => Carbon::now()->subMonths(4 - $index),
             ]);
         }
 
@@ -49,35 +53,39 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($measurements as $m) {
+            $sn = StatName::firstOrCreate(['name' => $m['name']]);
+            
             Stat::create([
-                'stat_id'    => (string) Str::uuid(),
-                'user_id'    => $user->user_id,
-                'name_stat'  => $m['name'],
-                'value'      => $m['val'],
-                'unit'       => $m['unit'],
-                'type'       => $m['type'],
-                'created_at' => Carbon::now(),
+                'stat_id'      => (string) Str::uuid(),
+                'user_id'      => $user->user_id,
+                'id_stat_name' => $sn->id_stat_name,
+                'value'        => $m['val'],
+                'unit'         => $m['unit'],
+                'type'         => $m['type'],
+                'created_at'   => Carbon::now(),
             ]);
         }
 
-        $weightStat = Stat::where('name_stat', 'Вес тела')->orderBy('created_at', 'desc')->first();
-        DB::table('target')->insert([
+        Target::create([
             'target_id'    => (string) Str::uuid(),
-            'stat_id'      => $weightStat->stat_id,
             'user_id'      => $user->user_id,
-            'name_target'  => 'Сбросить вес',
+            'id_stat_name' => $snWeight->id_stat_name,
+            'type_target'  => 'main',
             'target_value' => 85.0,
-            'is_up'        => false, 
+            'is_up'        => false,
+            'is_active'    => true,
         ]);
 
-        $benchStat = Stat::where('name_stat', 'Жим лежа')->first();
-        DB::table('target')->insert([
+        $snBench = StatName::where('name', 'Жим лежа')->first();
+
+        Target::create([
             'target_id'    => (string) Str::uuid(),
-            'stat_id'      => $benchStat->stat_id,
             'user_id'      => $user->user_id,
-            'name_target'  => 'Силовой показатель',
+            'id_stat_name' => $snBench->id_stat_name,
+            'type_target'  => 'important',
             'target_value' => 100.0,
             'is_up'        => true,
+            'is_active'    => true,
         ]);
 
         $activePlan = Training_plan::create([
@@ -114,14 +122,12 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Photo_stat::create([
-            'photo_id' => (string) Str::uuid(),
-            'user_id'       => $user->user_id,
-            'name_photo'    => 'before_example.jpg',
-            'is_before'     => true,
-            'created_at'    => Carbon::now()->subMonths(3),
+            'photo_id'   => (string) Str::uuid(),
+            'user_id'    => $user->user_id,
+            'name_photo' => 'before_example.jpg',
+            'is_before'  => true,
+            'created_at' => Carbon::now()->subMonths(3),
         ]);
-
-        $this->command->info('✅ База данных успешно засеяна всеми данными для аналитики!');
     }
 
     private function seedDaysForPlan($plan, $daysData)

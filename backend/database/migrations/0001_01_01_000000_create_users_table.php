@@ -10,13 +10,14 @@ return new class extends Migration
     {
         Schema::create('user', function (Blueprint $table) {
             $table->uuid('user_id')->primary();
+            $table->uuid('chat_uuid')->nullable()->unique();
             $table->string('name');
             $table->string('email')->unique();
             $table->enum('gender', ['male', 'female']);
             $table->string('password');
             $table->integer('sport_id')->nullable();
             $table->integer('role_id')->default(1);
-            $table->string('avatar_url');
+            $table->string('avatar_url')->nullable();
             $table->date('birth_day');
             $table->timestamps();
         });

@@ -6,7 +6,7 @@ use App\Models\User;
 use App\Models\Workout_exercise;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -21,6 +21,7 @@ class AuthController extends Controller
         ]);
 
         $user = User::create([
+            'user_id' => (string) Str::uuid(),
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
@@ -65,7 +66,7 @@ class AuthController extends Controller
     {
         return $request->user()->load([
             'training_plans.training_days.workout_exercises.exercise',
-            'stats'
+            'stats.statName'
         ]);
     }
 

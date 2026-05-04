@@ -6,6 +6,7 @@ import Analytics from "../pages/Analytics/Analytics";
 import TrainingPage from "../pages/Trainings/TrainingPage";
 import Profile from "../pages/Profile/Profile";
 import InGym from "../pages/InGym/InGym";
+import Chat from "../pages/Chat/Chat";
 import "./styles/index.css";
 
 export default function App() {
@@ -19,6 +20,7 @@ export default function App() {
       <Route path="/analytics" element={<Analytics />} />
       <Route path="/InGym" element={<InGym />} />
       <Route path="/profile" element={<Profile />} />
+      <Route path="/chat" element={<Chat />} />
     </Routes>
   );
 }

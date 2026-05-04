@@ -7,6 +7,7 @@ const MENU_ITEMS = [
   { path: "/training", label: "Тренировки", icon: "/icons/gym.svg" },
   { path: "/analytics", label: "Аналитика", icon: "/icons/chart.svg" },
   { path: "/InGym", label: "В зале", icon: "/icons/clock.svg" },
+  { path: "/chat", label: "Чаты", icon: "/icons/clock.svg"}
 ];
 
 const BOTTOM_ITEMS = [
